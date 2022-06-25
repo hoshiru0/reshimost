@@ -2,7 +2,7 @@
 #include <GLFW/glfw3.h>
 
 #include "utility.hpp"
-#include "shader.hpp"
+#include "gl/shader.hpp"
 #include "scene.hpp"
 #include "scenes/scene1.hpp"
 

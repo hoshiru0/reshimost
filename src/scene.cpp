@@ -1,26 +1,29 @@
-#include <GLFW/glfw3.h>
 #include <iostream>
 
 #include "scene.hpp"
 #include "window.hpp"
+#include "camera.hpp"
 
+#include <GLFW/glfw3.h>
 
 std::unique_ptr<Scene> current_scene;
 
 void Scene::updateScene() {
+    camera->update();
     update();
-    for (auto& e : entities) {
-        e->update();
+    for (auto it = entities.end()-1; it >= entities.begin(); it--) {
+        it->get()->updateEntity();
     }
 }
 
+double delta_time;
+
 void Scene::run() {
-    double delta_time {};
 
     uint32_t fps {};
     float next_second = 1;
     double time_last_frame {};
-    while (!glfwWindowShouldClose(window->getGlfwWindowPtr())) {
+    while (!glfwWindowShouldClose(window.getGlfwWindowPtr())) {
         /* Render here */
         
         delta_time = glfwGetTime()-time_last_frame;
@@ -30,7 +33,7 @@ void Scene::run() {
         updateScene();
 
         /* Swap front and back buffers */
-        glfwSwapBuffers(window->getGlfwWindowPtr());
+        glfwSwapBuffers(window.getGlfwWindowPtr());
 
         /* Poll for and process events */
         glfwPollEvents();

@@ -2,23 +2,24 @@
 #include <memory>
 #include <vector>
 #include "entity.hpp"
+#include "camera.hpp"
+
+extern double delta_time;
 
 struct Scene {
-    std::vector<std::unique_ptr<Entity>> entities;
-    
+    std::vector<std::shared_ptr<Entity>> entities;
+
     template<typename T>
-    void createEntity() {
-        static int l = [] () { 
-            if (!Entity::static_initialized<T>) {
-                Entity::staticInit<T>();
-            }
-        }();
-        entities.push_back(std::make_unique<T>());
+    std::shared_ptr<T> createEntity() {
+        auto e = std::make_shared<T>();
+        entities.emplace_back(e);
+        return e;
     }
 
     void updateScene(void);
     virtual void update(void) {}
     void run(void);
+    virtual ~Scene() = default;
 };
 
 extern std::unique_ptr<Scene> current_scene;

@@ -5,67 +5,43 @@
 #include <memory>
 #include <array>
 #include <glad/glad.h>
+#include <glm/mat4x4.hpp>
+#include <glm/gtx/string_cast.hpp>
 
+#include "camera.hpp"
 #include "smartvector.hpp"
 #include "transform.hpp"
-#include "shader.hpp"
+#include "gl/shader.hpp"
 #include "utility.hpp"
-#include "multirender.hpp"
+#include "gl/vao.hpp"
+#include "gl/vbo.hpp"
 
+extern Shader entity_shader;
 
-
-struct Entity {
-    inline static Shader shader {
-        R"(#version 300 es
-        precision mediump float;
-        in vec2 vert;
-        in mat4 transform;
-
-        void main() {
-            gl_Position = transform * vec4(0.0, 0.0, 0.0, 1.0);
-        })",
-        R"(#version 300 es
-        precision mediump float;
-        out vec4 FragColor;
-        void main() {
-            FragColor = vec4(1.0f, 0.0f, 1.0f, 1.0f);
-        })"
-    };
-
-    template<typename T>
-    inline static MultiRender multi_render { T::shader };
-
-    inline static std::initializer_list<std::pair<const char*, std::initializer_list<float>>> attributes {
-        {"vert", {1.f,2.f,3.f}},
-        {"hla2", {2,3,4,5,6,7}}
-    };
-
-    
-
-    inline static std::initializer_list<float> vert {
+struct EntityParams {
+    Shader* shader {&entity_shader};
+    std::initializer_list<float> vertices {
         -0.5f, -0.5f,
         -0.5f,  0.5f,
         0.5f,  0.5f,
         0.5f, -0.5f
     };
+};
 
-    template<typename T>
-    inline static SmartVector<glm::mat4> transform_buffer;
 
-    template<typename T>
-    inline static bool static_initialized {};
+struct Entity : Transform {
+    inline static uint32_t entity_count {};
+    VAO vao;
+    VBO vbo;
+    EntityParams params;
 
-    template<typename T>
-    static void staticInit() {
-    }
+    Entity(EntityParams&& params = EntityParams{});
 
-    template<typename T>
-    static void staticUpdate() {
-        multi_render<T>.render();
-    }
+    ~Entity() {}
 
+    void updateEntity(void);
     virtual void update() {
-
+        
     }
 };
 

@@ -4,10 +4,14 @@
 
 //auto window = std::make_unique<Window>("hakugame");
 
-Window::Window(const std::string_view title, const uint16_t width, const uint16_t height) {
+Window window {"haku"};
+
+Window::Window(const std::string_view title, const uint16_t w, const uint16_t h) {
     if (!glfwInit()) {
         terminate("ERROR: glfwInit() in file ", __FILE__);
     }
+    width = w;
+    height = h;
 
     window = glfwCreateWindow(width, height, title.data(), NULL, NULL);
     if (!window) {
@@ -25,7 +29,8 @@ Window::Window(const std::string_view title, const uint16_t width, const uint16_
 
 void Window::setSize(int w, int h) {
     glfwGetWindowSize(window, &w, &h);
-    size = {w, h};
+    width = w;
+    height = h;
 }
 
 void Window::setPos(int x, int y) {
@@ -33,7 +38,8 @@ void Window::setPos(int x, int y) {
 }
 
 void Window::onResize(int w, int h) {
-    size = {w, h};
+    width = w;
+    height = h;
     glViewport(0, 0, w, h); // Update opengl width height
 }
 
@@ -41,13 +47,9 @@ GLFWwindow* Window::getGlfwWindowPtr() const {
     return window;
 }
 
-Window::Size Window::getSize() const {
-    return size;
-}
-
 void Window::toggleFullScreen() {
     GLFWmonitor *monitor = glfwGetPrimaryMonitor();
-    glfwSetWindowMonitor(window, monitor, 0, 0, size.width, size.height, GLFW_DONT_CARE);
+    glfwSetWindowMonitor(window, monitor, 0, 0, width, height, GLFW_DONT_CARE);
 }
 
 Window::~Window() {

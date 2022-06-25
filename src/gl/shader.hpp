@@ -3,9 +3,11 @@
 #include <array>
 #include <string>
 #include <unordered_map>
+#include <glm/mat4x4.hpp>
 
-#include "smartvector.hpp"
-#include "utility.hpp"
+#include "../smartvector.hpp"
+#include "../utility.hpp"
+#include "vbo.hpp"
 
 class Shader {
     struct AttribInfo {
@@ -13,6 +15,7 @@ class Shader {
         uint32_t location;
         uint32_t type;
         uint32_t size;
+        uint32_t unique_vbo {};
     };
     std::unordered_map<std::string, AttribInfo> attribs;
 
@@ -27,12 +30,17 @@ class Shader {
 public:
     Shader(const char* vSource_, const char* fSource_);
 
+    static void compileAll(void);
     void compile(void);
     void use(void);
+    uint32_t setAttribute(const char* name, std::initializer_list<float> buffer, int n, bool dynamic = false, uint32_t type = 0x1406);
+    uint32_t setAttributeOnce(const char* name, std::initializer_list<float> buffer, int n, bool dynamic = false, uint32_t type = 0x1406);
 
-    const AttribInfo& getAttribInfo(std::string) const;
+    void uniformMat4f(const char* name, glm::mat4& m);
+
+    const AttribInfo& getAttribInfo(const char*) const;
     uint32_t getProgram(void) const;
-    uint32_t getAttrib(std::string_view name) const;
+    uint32_t getAttrib(const char*) const;
     void destroy(void);
     ~Shader();
 };
