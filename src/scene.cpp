@@ -16,6 +16,11 @@ void Scene::updateScene() {
     }
 }
 
+void Scene::destroyEntity(uint32_t index) {
+    entities.erase(entities.begin()+index);
+    entities[index]->index = index;
+}
+
 double delta_time;
 
 void Scene::run() {

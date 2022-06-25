@@ -2,20 +2,21 @@
 #include "../input.hpp"
 
 #include "../gl/shader.hpp"
+#include <glad/glad.h>
 
 static Shader tshader {
 R"(#version 300 es
 precision mediump float;
-in vec2 vert;
-in vec3 f_color;
+in vec2 a_vert;
+in vec3 a_color;
 
 out vec3 color;
 
 uniform mat4 u_MVP;
 
 void main() {
-    gl_Position = u_MVP * vec4(vert, 0.0, 1.0);
-    color = f_color;
+    gl_Position = u_MVP * vec4(a_vert, 0.0, 1.0);
+    color = a_color;
 })",
 R"(#version 300 es
 precision mediump float;
@@ -29,23 +30,28 @@ void main() {
 
 static std::initializer_list<float> vertices {
     -0.5f, -0.5f,
-    -0.5f,  0.5f,
-    0.5f,  0.5f,
-    0.5f, -0.5f
+    0.5f, -0.5f,
+    0.0f, 0.5f
 };
 
 std::initializer_list<float> color {
     1.f, 0.f, 0.0f,
      1.f, 1.f, 0.0f,
-     0.f, 1.f, 0.0f,
-     0.0f,  0.0f, 1.0f
+     0.f, 1.f, 0.0f
 };
 
 Triangle::Triangle() {
-    
+    Entity::shader = &tshader;
 }
+
+void Triangle::init() {
+    shader->setAttributeOnce("a_vert", vertices, 2);
+    shader->setAttributeOnce("a_color", color, 3);
+}
+
 void Triangle::update() {
-    glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+    glLineWidth(10.f);
+    glDrawArrays(GL_LINE_LOOP, 0, 3);
 }
 
 void Triangle::move() {

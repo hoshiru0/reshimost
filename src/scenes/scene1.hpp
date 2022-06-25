@@ -18,7 +18,13 @@ struct Scene1 : Scene {
             current = createEntity<Triangle>();
             current->position = pos;
             current->rotation = rot;
+        } 
+        if (input.getMouseRight()) {
+            if (current_scene->entities.size()) {
+                current_scene->entities.pop_back();
+            }
         }
+
         current->move();
         
     }

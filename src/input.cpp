@@ -9,6 +9,7 @@ Input input;
 
 static std::array<uint8_t, 512> keys {};
 static uint8_t mouse_left {}; 
+static uint8_t mouse_right {};
 
 static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods) {
     keys[key] = action;
@@ -16,6 +17,8 @@ static void key_callback(GLFWwindow *window, int key, int scancode, int action, 
 static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
     if (button == GLFW_MOUSE_BUTTON_LEFT) {
         mouse_left = action;
+    } else if (button == GLFW_MOUSE_BUTTON_RIGHT) {
+        mouse_right = action;
     }
 }
 
@@ -26,7 +29,7 @@ Input::Input() {
 }
 
 bool Input::getKey(int key) {
-    return keys[key] > 0;
+    return keys[key];
 }
 
 bool Input::getKeyDown(int key) {
@@ -41,4 +44,8 @@ bool Input::getKeyDown(int key) {
 
 bool Input::getMouseLeft() {
     return mouse_left;
+}
+
+bool Input::getMouseRight() {
+    return mouse_right;
 }

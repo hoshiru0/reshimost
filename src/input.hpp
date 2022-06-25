@@ -129,6 +129,7 @@ struct Input {
     bool getKey(int key);
     bool getKeyDown(int key);
     bool getMouseLeft(void);
+    bool getMouseRight(void);
 };
 
 extern Input input;

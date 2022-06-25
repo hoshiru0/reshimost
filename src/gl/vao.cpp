@@ -3,7 +3,6 @@
 
 VAO::VAO() {
     glGenVertexArrays(1, &vao);
-    bind();
 }
 
 void VAO::bind() {

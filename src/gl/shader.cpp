@@ -84,7 +84,7 @@ uint32_t Shader::setAttributeOnce(const char* name, std::initializer_list<float>
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
         glBufferData(GL_ARRAY_BUFFER, buffer.size() * sizeof(float), buffer.begin(), dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
 
-        info.unique_vbo = vbo;        
+        info.unique_vbo = vbo;
     } else { // Reuse vbo
         glBindBuffer(GL_ARRAY_BUFFER, info.unique_vbo);
     }
@@ -94,8 +94,6 @@ uint32_t Shader::setAttributeOnce(const char* name, std::initializer_list<float>
     
     return info.unique_vbo;
 }
-
-
 
 void Shader::uniformMat4f(const char* name, glm::mat4 &m) {
     glUniformMatrix4fv(attribs[name].location, 1, GL_FALSE, glm::value_ptr(m));

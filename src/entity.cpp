@@ -1,3 +1,5 @@
+#include <glad/glad.h>
+
 #include "entity.hpp"
 #include "scene.hpp"
 
@@ -31,29 +33,42 @@ static std::initializer_list<float> entity_vertices  {
     0.5f,  0.5f,
     0.5f, -0.5f
 };
-static std::initializer_list<float> color  {
+static std::initializer_list<float> entity_color  {
     1.f, 0.0f, 0.0f,
     0.0f, 1.0f, 0.0f,
     0.0f,  0.0f, 1.0f,
     1.0f,  0.0f, 1.0f
 };
 
-Entity::Entity(EntityParams&& params) :
-    vao(),
-    params(params) {
-    float x {};
-    std::initializer_list<float> a{ x };
-    
-    params.shader->setAttributeOnce("a_vert", params.vertices, 2);
-    params.shader->setAttributeOnce("a_color", color, 3);
+Entity::Entity() : shader(&entity_shader) {
+
+}
+
+void Entity::initEntity() {
+    shader->use();
+    vao.bind();
+    init();
     vao.unbind();
 }
 
+void Entity::init() { // default initialization
+    shader->setAttributeOnce("a_vert", entity_vertices, 2);
+    shader->setAttributeOnce("a_color", entity_color, 3);
+}
+
+void Entity::update() {
+    glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+}
+
 void Entity::updateEntity() {
-    params.shader->use();
+    shader->use();
     glm::mat4 mvp = camera->getMatrix() * getMatrix();
     // * camera->getMatrix() *
-    params.shader->uniformMat4f("u_MVP", mvp);
+    shader->uniformMat4f("u_MVP", mvp);
     vao.bind();
     update();
+}
+
+void Entity::destroy() {
+    current_scene->destroyEntity(index);
 }
