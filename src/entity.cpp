@@ -52,8 +52,8 @@ void Entity::initEntity() {
 }
 
 void Entity::init() { // default initialization
-    shader->setAttributeOnce("a_vert", entity_vertices, 2);
-    shader->setAttributeOnce("a_color", entity_color, 3);
+    shared_vbo_vertex = shader->setSharedAttribute("a_vert", entity_vertices, 2);
+    shared_vbo_color = shader->setSharedAttribute("a_color", entity_color, 3);
 }
 
 void Entity::update() {

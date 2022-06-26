@@ -5,7 +5,7 @@
 #include "../input.hpp"
 
 struct Scene1 : Scene {
-    std::shared_ptr<Triangle> current;
+    std::weak_ptr<Triangle> current;
     Scene1() {
         //createEntity<Triangle>();
         current = createEntity<Triangle>();
@@ -13,19 +13,26 @@ struct Scene1 : Scene {
 
     void update() {
         if (input.getMouseLeft()) {
-            auto pos = current->position;
-            auto rot = current->rotation;
-            current = createEntity<Triangle>();
-            current->position = pos;
-            current->rotation = rot;
+            glm::vec3 position {};
+            glm::quat rotation {};
+            if (auto c = current.lock()) {
+                position = c->position;
+                rotation = c->rotation;
+            }
+            auto ptr = createEntity<Triangle>();
+            ptr->position = position;
+            ptr->rotation = rotation;
+            current = ptr;
         } 
         if (input.getMouseRight()) {
-            if (current_scene->entities.size()) {
+            if (current_scene->entities.size() > 1) {
                 current_scene->entities.pop_back();
+                current = std::static_pointer_cast<Triangle>(current_scene->entities.back());
             }
         }
 
-        current->move();
-        
+        if (auto c = current.lock()) {
+            c->move();
+        }
     }
 };

@@ -1,5 +1,5 @@
+#pragma once
 #include <cstdint>
-
 
 struct VAO {
     uint32_t vao;

@@ -12,6 +12,8 @@ struct Entity : Transform {
     uint32_t index;
     Shader* shader;
     VAO vao;
+    std::shared_ptr<VBO> shared_vbo_vertex;
+    std::shared_ptr<VBO> shared_vbo_color;
 
     Entity();
 

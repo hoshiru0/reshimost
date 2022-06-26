@@ -45,12 +45,12 @@ Triangle::Triangle() {
 }
 
 void Triangle::init() {
-    shader->setAttributeOnce("a_vert", vertices, 2);
-    shader->setAttributeOnce("a_color", color, 3);
+    shared_vbo_vertex = shader->setSharedAttribute("a_vert", vertices, 2);
+    shared_vbo_color = shader->setSharedAttribute("a_color", color, 3);
 }
 
 void Triangle::update() {
-    glLineWidth(10.f);
+    glLineWidth(5.f);
     glDrawArrays(GL_LINE_LOOP, 0, 3);
 }
 

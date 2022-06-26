@@ -1,6 +1,7 @@
 #pragma once
 #include <string_view>
 #include <array>
+#include <memory>
 #include <string>
 #include <unordered_map>
 #include <glm/mat4x4.hpp>
@@ -15,7 +16,7 @@ class Shader {
         uint32_t location;
         uint32_t type;
         uint32_t size;
-        uint32_t unique_vbo {};
+        std::weak_ptr<VBO> vbo;
     };
     std::unordered_map<std::string, AttribInfo> attribs;
 
@@ -34,7 +35,7 @@ public:
     void compile(void);
     void use(void);
     uint32_t setAttribute(const char* name, std::initializer_list<float> buffer, int n, bool dynamic = false, uint32_t type = 0x1406);
-    uint32_t setAttributeOnce(const char* name, std::initializer_list<float> buffer, int n, bool dynamic = false, uint32_t type = 0x1406);
+    std::shared_ptr<VBO> setSharedAttribute(const char* name, std::initializer_list<float> buffer, int n, bool dynamic = false, uint32_t type = 0x1406);
 
     void uniformMat4f(const char* name, glm::mat4& m);
 

@@ -74,25 +74,26 @@ uint32_t Shader::setAttribute(const char* name, std::initializer_list<float> buf
     return vbo;
 }
 
-uint32_t Shader::setAttributeOnce(const char* name, std::initializer_list<float> buffer, int n, bool dynamic, uint32_t type) {
+std::shared_ptr<VBO> Shader::setSharedAttribute(const char* name, std::initializer_list<float> buffer, int n, bool dynamic, uint32_t type) {
     AttribInfo& info = attribs[name];
     uint32_t index = attribs[name].index;
 
-    if (!info.unique_vbo) { // Create vbo
-        uint32_t vbo;
-        glGenBuffers(1, &vbo);
-        glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        glBufferData(GL_ARRAY_BUFFER, buffer.size() * sizeof(float), buffer.begin(), dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
-
-        info.unique_vbo = vbo;
+    auto vbo = info.vbo.lock();
+    if (!vbo) { 
+        vbo = std::make_shared<VBO>();
+        if (dynamic) {
+            vbo->bufferDataDynamic(buffer);
+        } else {
+            vbo->bufferDataStatic(buffer);
+        }
     } else { // Reuse vbo
-        glBindBuffer(GL_ARRAY_BUFFER, info.unique_vbo);
+        vbo->bind();
     }
+
     glVertexAttribPointer(index, n, type, GL_FALSE, n * sizeof(float), 0);
     glEnableVertexAttribArray(index);
-    
-    
-    return info.unique_vbo;
+
+    return vbo;
 }
 
 void Shader::uniformMat4f(const char* name, glm::mat4 &m) {
