@@ -3,10 +3,12 @@
 #include "../scene.hpp"
 #include "../entities/triangle.hpp"
 #include "../input.hpp"
+#include "../entities/test.hpp"
 
 struct Scene1 : Scene {
     std::weak_ptr<Triangle> current;
     Scene1() {
+        createEntity<Test>();
         //createEntity<Triangle>();
         current = createEntity<Triangle>();
     }

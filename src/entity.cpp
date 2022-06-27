@@ -21,9 +21,10 @@ R"(#version 300 es
 precision mediump float;
 out vec4 FragCoord;
 in vec3 color;
+uniform float time;
 
 void main() {
-    FragCoord = vec4(color, 1.0f);
+    FragCoord = vec4(color.x + cos(time)/2.0f+0.5, color.y, color.z, 1.0f);
 })"
 };
 
@@ -41,7 +42,6 @@ static std::initializer_list<float> entity_color  {
 };
 
 Entity::Entity() : shader(&entity_shader) {
-
 }
 
 void Entity::initEntity() {

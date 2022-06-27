@@ -157,7 +157,7 @@ void Shader::uniformMat4f(const char* name, glm::mat4 &m) {
 void Shader::uniform1f(const char* name, float v) {
     if (auto it = uniforms.find(name); it != uniforms.end()) {
         glUniform1f(it->second.location, v);
-    }
+    } 
 }
 
 uint32_t Shader::getProgram() const {

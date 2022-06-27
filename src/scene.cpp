@@ -35,6 +35,7 @@ void Scene::run() {
         time_last_frame = current_time;
 
         Shader::forEach([] (Shader* s) {
+            s->use();
             s->uniform1f("time", current_time);
         });
 
