@@ -17,22 +17,26 @@ void Scene::updateScene() {
 }
 
 void Scene::destroyEntity(uint32_t index) {
-    entities.erase(entities.begin()+index);
-    entities[index]->index = index;
+    entities.back()->index = index;
+    entities.erase(entities.begin()+index);    
 }
 
-double delta_time;
+double delta_time {};
+double current_time {};
 
 void Scene::run() {
-
     uint32_t fps {};
     float next_second = 1;
     double time_last_frame {};
     while (!glfwWindowShouldClose(window.getGlfwWindowPtr())) {
         /* Render here */
-        
         delta_time = glfwGetTime()-time_last_frame;
-        time_last_frame = glfwGetTime();
+        current_time = glfwGetTime();
+        time_last_frame = current_time;
+
+        Shader::forEach([] (Shader* s) {
+            s->uniform1f("time", current_time);
+        });
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         updateScene();

@@ -50,10 +50,17 @@ void Shader::compile() {
     glGetProgramiv(program, GL_ACTIVE_ATTRIBUTES, &count);
     for (int i {}; i < count; i++) {
         char name[16];
-        GLenum type;
-        glGetActiveAttrib(program, (GLuint)i, sizeof(name), NULL, NULL, &type, name);
+        glGetActiveAttrib(program, (GLuint)i, sizeof(name), NULL, NULL, NULL, name);
         attribs[name].location = glGetAttribLocation(program, name);
         attribs[name].index = i;
+    }
+
+    glGetProgramiv(program, GL_ACTIVE_UNIFORMS, &count);
+    for (int i{}; i < count; i++) {
+        char name[16];
+        glGetActiveUniform(program, (GLuint) i, sizeof(name), NULL, NULL, NULL, name);
+        uniforms[name].location = glGetUniformLocation(program, name);
+        uniforms[name].index = i;
     }
 }
 
@@ -61,7 +68,7 @@ void Shader::use() {
     glUseProgram(program);
 }
 
-uint32_t Shader::setAttribute(const char* name, std::initializer_list<float> buffer, int n, bool dynamic, uint32_t type) {
+VBO Shader::setAttribute(const char* name, uint8_t n, std::initializer_list<float> buffer, bool dynamic, uint32_t type) {
     uint32_t vbo;
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -69,27 +76,72 @@ uint32_t Shader::setAttribute(const char* name, std::initializer_list<float> buf
     
     uint32_t index = attribs[name].index;
     glVertexAttribPointer(index, n, type, GL_FALSE, n * sizeof(float), 0);
-    glEnableVertexAttribArray(index);    
+    glEnableVertexAttribArray(index);
     
     return vbo;
 }
 
-std::shared_ptr<VBO> Shader::setSharedAttribute(const char* name, std::initializer_list<float> buffer, int n, bool dynamic, uint32_t type) {
-    AttribInfo& info = attribs[name];
-    uint32_t index = attribs[name].index;
+VBO Shader::setAttribute(std::initializer_list<std::pair<const char*, uint8_t>> arr, std::initializer_list<float> buffer, bool dynamic, uint32_t type) {
+    VBO vbo;
+    if (dynamic) {
+        vbo.bufferDataDynamic(buffer);
+    } else {
+        vbo.bufferDataStatic(buffer);
+    }
+    
+    uint32_t size_row {};
+    for (auto& [name, n] : arr) {
+        size_row += n;
+    }
 
-    auto vbo = info.vbo.lock();
-    if (!vbo) { 
+    uint32_t c {};
+    for (auto& [name, n] : arr) {
+        AttribInfo& info = attribs[name];
+        glVertexAttribPointer(info.index, n, type, GL_FALSE, size_row * sizeof(float), (void*)(c * sizeof(float)));
+        glEnableVertexAttribArray(info.index);
+        c+=n;
+    }
+    return vbo;
+}
+
+std::shared_ptr<VBO> getSharedVbo(std::initializer_list<float> buffer, bool dynamic) {
+    auto& weakptr = Shader::shared_vbo_table[(void*)buffer.begin()];
+    auto vbo = weakptr.lock();
+    if (!vbo) {
         vbo = std::make_shared<VBO>();
+        weakptr = vbo;
+        
         if (dynamic) {
             vbo->bufferDataDynamic(buffer);
         } else {
             vbo->bufferDataStatic(buffer);
         }
-    } else { // Reuse vbo
+    } else {
         vbo->bind();
     }
+    return vbo;
+}
 
+std::shared_ptr<VBO> Shader::setSharedAttribute(std::initializer_list<std::pair<const char*, uint8_t>> arr, std::initializer_list<float> buffer, bool dynamic, uint32_t type) {
+    auto vbo = getSharedVbo(buffer, dynamic);
+    uint32_t size_row {};
+    for (auto& [name, n] : arr) {
+        size_row += n;
+    }
+
+    uint32_t c {};
+    for (auto& [name, n] : arr) {
+        AttribInfo& info = attribs[name];
+        glVertexAttribPointer(info.index, n, type, GL_FALSE, size_row * sizeof(float), (void*)(c * sizeof(float)));
+        glEnableVertexAttribArray(info.index);
+        c+=n;
+    }
+    return vbo;
+}
+
+std::shared_ptr<VBO> Shader::setSharedAttribute(const char* name, uint8_t n, std::initializer_list<float> buffer, bool dynamic, uint32_t type) {
+    auto vbo = getSharedVbo(buffer, dynamic);
+    uint32_t index = attribs[name].index;
     glVertexAttribPointer(index, n, type, GL_FALSE, n * sizeof(float), 0);
     glEnableVertexAttribArray(index);
 
@@ -97,7 +149,15 @@ std::shared_ptr<VBO> Shader::setSharedAttribute(const char* name, std::initializ
 }
 
 void Shader::uniformMat4f(const char* name, glm::mat4 &m) {
-    glUniformMatrix4fv(attribs[name].location, 1, GL_FALSE, glm::value_ptr(m));
+    if (auto it = uniforms.find(name); it != uniforms.end()) {
+        glUniformMatrix4fv(it->second.location, 1, GL_FALSE, glm::value_ptr(m));
+    }
+}
+
+void Shader::uniform1f(const char* name, float v) {
+    if (auto it = uniforms.find(name); it != uniforms.end()) {
+        glUniform1f(it->second.location, v);
+    }
 }
 
 uint32_t Shader::getProgram() const {

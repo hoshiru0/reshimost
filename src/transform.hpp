@@ -9,7 +9,7 @@ struct Transform {
     //glm::mat4 transform { 1.f };
 
     glm::vec3 scale {};
-    glm::quat rotation {};
+    float rotation {};
     glm::vec3 position {};
 
     virtual glm::mat4 getMatrix();

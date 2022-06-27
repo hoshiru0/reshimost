@@ -6,6 +6,7 @@
 #include "camera.hpp"
 
 extern double delta_time;
+extern double current_time;
 
 struct Scene {
     SmartVector<std::shared_ptr<Entity>, true> entities;
@@ -14,6 +15,7 @@ struct Scene {
     std::shared_ptr<T> createEntity() {
         auto e = std::make_shared<T>();
         entities.emplace_back(e);
+        e->index = entities.size()-1;
         e->initEntity();
         return e;
     }

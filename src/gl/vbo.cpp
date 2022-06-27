@@ -7,16 +7,29 @@ VBO::VBO() {
 }
 VBO::VBO(uint32_t vbo) : vbo(vbo) {}
 
+VBO::VBO(VBO&& vbo_) : vbo(vbo_.vbo) {
+    vbo_.vbo = 0;
+}
+VBO& VBO::operator=(VBO&& vbo_) {
+    vbo = vbo_.vbo;
+    vbo_.vbo = 0;
+    return *this;
+}
+
 void VBO::create() {
     glGenBuffers(1, &vbo);
+    std::cout << "create vbo: " << vbo << std::endl;
 }
 
 void VBO::destroy() {
+    std::cout << "destroy vbo: " << vbo << std::endl;
     glDeleteBuffers(1, &vbo);
 }
 
 VBO::~VBO() {
-    destroy();
+    if (vbo) {
+        destroy();
+    }
 }
 
 void VBO::bind() {

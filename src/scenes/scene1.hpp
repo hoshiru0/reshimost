@@ -13,8 +13,8 @@ struct Scene1 : Scene {
 
     void update() {
         if (input.getMouseLeft()) {
-            glm::vec3 position {};
-            glm::quat rotation {};
+            glm::vec3 position;
+            float rotation;
             if (auto c = current.lock()) {
                 position = c->position;
                 rotation = c->rotation;
