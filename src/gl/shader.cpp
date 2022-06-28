@@ -46,21 +46,49 @@ void Shader::compile() {
     glDeleteShader(vs);
     glDeleteShader(fs);
 
+    auto setsize = [] (GLenum type, uint32_t& size) {
+        switch (type) {
+        case GL_FLOAT_VEC3:
+            size = 3;
+            break;
+        case GL_FLOAT_MAT4:
+            size = 4;
+            break;
+        case GL_FLOAT_VEC2:
+            size = 2;
+            break;
+        case GL_FLOAT:
+            size = 1;
+            break;
+        
+        default:
+            std::cerr << "udentified shader type: " << type << std::endl;
+            break;
+        }
+    };
+
     GLint count;
     glGetProgramiv(program, GL_ACTIVE_ATTRIBUTES, &count);
     for (int i {}; i < count; i++) {
         char name[16];
-        glGetActiveAttrib(program, (GLuint)i, sizeof(name), NULL, NULL, NULL, name);
+        GLenum type;
+        int size;
+        glGetActiveAttrib(program, (GLuint)i, sizeof(name), NULL, &size, &type, name);
         attribs[name].location = glGetAttribLocation(program, name);
         attribs[name].index = i;
+        setsize(type, attribs[name].size);
+        attribs[name].size *= size;
     }
 
     glGetProgramiv(program, GL_ACTIVE_UNIFORMS, &count);
     for (int i{}; i < count; i++) {
         char name[16];
-        glGetActiveUniform(program, (GLuint) i, sizeof(name), NULL, NULL, NULL, name);
+        GLenum type;
+        glGetActiveUniform(program, (GLuint) i, sizeof(name), NULL, NULL, &type, name);
         uniforms[name].location = glGetUniformLocation(program, name);
         uniforms[name].index = i;
+        uniforms[name].type = type;
+        setsize(type, uniforms[name].size);
     }
 }
 
@@ -68,20 +96,23 @@ void Shader::use() {
     glUseProgram(program);
 }
 
-VBO Shader::setAttribute(const char* name, uint8_t n, std::initializer_list<float> buffer, bool dynamic, uint32_t type) {
-    uint32_t vbo;
-    glGenBuffers(1, &vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, buffer.size() * sizeof(float), buffer.begin(), dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
+VBO Shader::setAttribute(const char* name, std::initializer_list<float> buffer, bool dynamic, uint32_t type) {
+    VBO vbo;
+    if (dynamic) {
+        vbo.bufferDataDynamic(buffer);
+    } else {
+        vbo.bufferDataStatic(buffer);
+    }
     
     uint32_t index = attribs[name].index;
-    glVertexAttribPointer(index, n, type, GL_FALSE, n * sizeof(float), 0);
+    uint32_t size = attribs[name].size;
+    glVertexAttribPointer(index, size, type, GL_FALSE, size * sizeof(float), 0);
     glEnableVertexAttribArray(index);
     
     return vbo;
 }
 
-VBO Shader::setAttribute(std::initializer_list<std::pair<const char*, uint8_t>> arr, std::initializer_list<float> buffer, bool dynamic, uint32_t type) {
+VBO Shader::setAttribute(std::initializer_list<const char*> arr, std::initializer_list<float> buffer, bool dynamic, uint32_t type) {
     VBO vbo;
     if (dynamic) {
         vbo.bufferDataDynamic(buffer);
@@ -90,16 +121,17 @@ VBO Shader::setAttribute(std::initializer_list<std::pair<const char*, uint8_t>> 
     }
     
     uint32_t size_row {};
-    for (auto& [name, n] : arr) {
-        size_row += n;
+    for (auto name : arr) {
+        size_row += attribs[name].size;
     }
 
     uint32_t c {};
-    for (auto& [name, n] : arr) {
+    for (auto name : arr) {
         AttribInfo& info = attribs[name];
-        glVertexAttribPointer(info.index, n, type, GL_FALSE, size_row * sizeof(float), (void*)(c * sizeof(float)));
+        uint32_t size = info.size;
+        glVertexAttribPointer(info.index, size, type, GL_FALSE, size_row * sizeof(float), (void*)(c * sizeof(float)));
         glEnableVertexAttribArray(info.index);
-        c+=n;
+        c += size;
     }
     return vbo;
 }
@@ -122,27 +154,29 @@ std::shared_ptr<VBO> getSharedVbo(std::initializer_list<float> buffer, bool dyna
     return vbo;
 }
 
-std::shared_ptr<VBO> Shader::setSharedAttribute(std::initializer_list<std::pair<const char*, uint8_t>> arr, std::initializer_list<float> buffer, bool dynamic, uint32_t type) {
+std::shared_ptr<VBO> Shader::setSharedAttribute(std::initializer_list<const char*> arr, std::initializer_list<float> buffer, bool dynamic, uint32_t type) {
     auto vbo = getSharedVbo(buffer, dynamic);
     uint32_t size_row {};
-    for (auto& [name, n] : arr) {
-        size_row += n;
+    for (auto name : arr) {
+        size_row += attribs[name].size;
     }
 
     uint32_t c {};
-    for (auto& [name, n] : arr) {
+    for (auto name : arr) {
+        uint32_t size = attribs[name].size;
         AttribInfo& info = attribs[name];
-        glVertexAttribPointer(info.index, n, type, GL_FALSE, size_row * sizeof(float), (void*)(c * sizeof(float)));
+        glVertexAttribPointer(info.index, size, type, GL_FALSE, size_row * sizeof(float), (void*)(c * sizeof(float)));
         glEnableVertexAttribArray(info.index);
-        c+=n;
+        c += size;
     }
     return vbo;
 }
 
-std::shared_ptr<VBO> Shader::setSharedAttribute(const char* name, uint8_t n, std::initializer_list<float> buffer, bool dynamic, uint32_t type) {
+std::shared_ptr<VBO> Shader::setSharedAttribute(const char* name, std::initializer_list<float> buffer, bool dynamic, uint32_t type) {
+    uint32_t size = attribs[name].size;
     auto vbo = getSharedVbo(buffer, dynamic);
     uint32_t index = attribs[name].index;
-    glVertexAttribPointer(index, n, type, GL_FALSE, n * sizeof(float), 0);
+    glVertexAttribPointer(index, size, type, GL_FALSE, size * sizeof(float), 0);
     glEnableVertexAttribArray(index);
 
     return vbo;

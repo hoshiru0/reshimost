@@ -20,11 +20,7 @@ class Shader {
         uint32_t type;
         uint32_t size;
     };
-    struct UniformInfo {
-        uint32_t index;
-        uint32_t location;
-        uint32_t type;
-    };
+    struct UniformInfo : Shader::AttribInfo {};
 
     std::unordered_map<std::string, AttribInfo> attribs;
     std::unordered_map<std::string, UniformInfo> uniforms;
@@ -50,10 +46,10 @@ public:
 
     void compile(void);
     void use(void);
-    VBO setAttribute(const char* name, uint8_t n, std::initializer_list<float> buffer, bool dynamic = false, uint32_t type = 0x1406);
-    VBO setAttribute(std::initializer_list<std::pair<const char*, uint8_t>> arr, std::initializer_list<float> buffer, bool dynamic = false, uint32_t type = 0x1406);
-    std::shared_ptr<VBO> setSharedAttribute(std::initializer_list<std::pair<const char*, uint8_t>> arr, std::initializer_list<float> buffer, bool dynamic = false, uint32_t type = 0x1406);
-    std::shared_ptr<VBO> setSharedAttribute(const char* name, uint8_t n, std::initializer_list<float> buffer, bool dynamic = false, uint32_t type = 0x1406);
+    VBO setAttribute(const char* name, std::initializer_list<float> buffer, bool dynamic = false, uint32_t type = 0x1406);
+    VBO setAttribute(std::initializer_list<const char*> arr, std::initializer_list<float> buffer, bool dynamic = false, uint32_t type = 0x1406);
+    std::shared_ptr<VBO> setSharedAttribute(std::initializer_list<const char*> arr, std::initializer_list<float> buffer, bool dynamic = false, uint32_t type = 0x1406);
+    std::shared_ptr<VBO> setSharedAttribute(const char* name, std::initializer_list<float> buffer, bool dynamic = false, uint32_t type = 0x1406);
 
     void uniformMat4f(const char* name, glm::mat4& m);
     void uniform1f(const char* name, float v);
