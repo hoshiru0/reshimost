@@ -40,11 +40,11 @@ void VBO::unbind() {
     glBindBuffer(GL_ARRAY_BUFFER , 0);
 }
 
-void VBO::bufferDataStatic(std::initializer_list<float> l) {
+template<typename T>
+void VBO::bufferData(std::initializer_list<T> l, uint32_t draw_type) {
     bind();
-    glBufferData(GL_ARRAY_BUFFER, l.size() * sizeof(float), l.begin(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, l.size() * sizeof(T), l.begin(), draw_type);
 }
-void VBO::bufferDataDynamic(std::initializer_list<float> l) {
-    bind();
-    glBufferData(GL_ARRAY_BUFFER, l.size() * sizeof(float), l.begin(), GL_DYNAMIC_DRAW);
-}
+
+template void VBO::bufferData(std::initializer_list<float>, uint32_t);
+template void VBO::bufferData(std::initializer_list<int>, uint32_t);

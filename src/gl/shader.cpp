@@ -96,89 +96,48 @@ void Shader::use() {
     glUseProgram(program);
 }
 
-VBO Shader::setAttribute(const char* name, std::initializer_list<float> buffer, bool dynamic, uint32_t type) {
-    VBO vbo;
-    if (dynamic) {
-        vbo.bufferDataDynamic(buffer);
-    } else {
-        vbo.bufferDataStatic(buffer);
-    }
-    
-    uint32_t index = attribs[name].index;
-    uint32_t size = attribs[name].size;
-    glVertexAttribPointer(index, size, type, GL_FALSE, size * sizeof(float), 0);
-    glEnableVertexAttribArray(index);
-    
-    return vbo;
-}
-
-VBO Shader::setAttribute(std::initializer_list<const char*> arr, std::initializer_list<float> buffer, bool dynamic, uint32_t type) {
-    VBO vbo;
-    if (dynamic) {
-        vbo.bufferDataDynamic(buffer);
-    } else {
-        vbo.bufferDataStatic(buffer);
-    }
-    
-    uint32_t size_row {};
-    for (auto name : arr) {
-        size_row += attribs[name].size;
-    }
-
-    uint32_t c {};
-    for (auto name : arr) {
-        AttribInfo& info = attribs[name];
-        uint32_t size = info.size;
-        glVertexAttribPointer(info.index, size, type, GL_FALSE, size_row * sizeof(float), (void*)(c * sizeof(float)));
-        glEnableVertexAttribArray(info.index);
-        c += size;
-    }
-    return vbo;
-}
-
-std::shared_ptr<VBO> getSharedVbo(std::initializer_list<float> buffer, bool dynamic) {
-    auto& weakptr = Shader::shared_vbo_table[(void*)buffer.begin()];
-    auto vbo = weakptr.lock();
-    if (!vbo) {
-        vbo = std::make_shared<VBO>();
-        weakptr = vbo;
-        
-        if (dynamic) {
-            vbo->bufferDataDynamic(buffer);
+template<bool shared, typename T>
+std::conditional_t<shared, std::shared_ptr<VBO>, VBO> Shader::setAttribute(std::initializer_list<const char*> arr, std::initializer_list<T> buffer, uint32_t draw_type) {
+    std::conditional_t<shared, std::shared_ptr<VBO>, VBO> vbo;
+    if constexpr (shared) {
+        auto& weakptr = Shader::shared_vbo_table[(void*)buffer.begin()];
+        vbo = weakptr.lock();
+        if (!vbo) {
+            vbo = std::make_shared<VBO>();
+            weakptr = vbo;
+            vbo->bufferData(buffer, draw_type);
         } else {
-            vbo->bufferDataStatic(buffer);
+            vbo->bind();
         }
     } else {
-        vbo->bind();
+        vbo.bufferData(buffer, draw_type);
     }
-    return vbo;
-}
 
-std::shared_ptr<VBO> Shader::setSharedAttribute(std::initializer_list<const char*> arr, std::initializer_list<float> buffer, bool dynamic, uint32_t type) {
-    auto vbo = getSharedVbo(buffer, dynamic);
     uint32_t size_row {};
     for (auto name : arr) {
         size_row += attribs[name].size;
+    }
+    uint32_t type {};
+    if constexpr (std::is_same_v<T, float>) {
+        type = GL_FLOAT;
     }
 
     uint32_t c {};
     for (auto name : arr) {
         uint32_t size = attribs[name].size;
         AttribInfo& info = attribs[name];
-        glVertexAttribPointer(info.index, size, type, GL_FALSE, size_row * sizeof(float), (void*)(c * sizeof(float)));
+        glVertexAttribPointer(
+            info.index, 
+            size, 
+            type, 
+            GL_FALSE, 
+            size_row * sizeof(T), 
+            (void*)(c * sizeof(T))
+        );
         glEnableVertexAttribArray(info.index);
         c += size;
     }
-    return vbo;
-}
-
-std::shared_ptr<VBO> Shader::setSharedAttribute(const char* name, std::initializer_list<float> buffer, bool dynamic, uint32_t type) {
-    uint32_t size = attribs[name].size;
-    auto vbo = getSharedVbo(buffer, dynamic);
-    uint32_t index = attribs[name].index;
-    glVertexAttribPointer(index, size, type, GL_FALSE, size * sizeof(float), 0);
-    glEnableVertexAttribArray(index);
-
+    
     return vbo;
 }
 
@@ -215,3 +174,6 @@ Shader::~Shader() {
         destroy();
     }
 }
+
+template VBO Shader::setAttribute<false>(std::initializer_list<const char*>, std::initializer_list<float>, uint32_t);
+template std::shared_ptr<VBO> Shader::setAttribute<true>(std::initializer_list<const char*>, std::initializer_list<float>, uint32_t);

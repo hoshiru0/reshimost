@@ -41,7 +41,7 @@ Triangle::Triangle() {
 }
 
 void Triangle::init() {
-    shared_vbo_vertex = shader->setSharedAttribute({"a_vert", "a_color"}, vertices);
+    shared_vbo_vertex = shader->setAttribute<true>({"a_vert", "a_color"}, vertices);
     //vbo2 = shader->setAttribute("a_color", color, 3);
 }
 
