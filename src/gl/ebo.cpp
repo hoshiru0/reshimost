@@ -1,5 +1,5 @@
 #include "ebo.hpp"
-#include <glad/glad.h>
+#include <glad/glad.hpp>
 
 EBO::EBO() {
     glGenBuffers(1, &vbo);

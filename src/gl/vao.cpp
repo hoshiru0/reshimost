@@ -1,5 +1,5 @@
 #include "vao.hpp"
-#include <glad/glad.h>
+#include <glad/glad.hpp>
 
 VAO::VAO() {
     glGenVertexArrays(1, &vao);

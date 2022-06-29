@@ -1,5 +1,5 @@
 #include "shader.hpp"
-#include <glad/glad.h>
+#include <glad/glad.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 Shader::Shader(const char* vSource_, const char* fSource_) : vSource(vSource_), fSource(fSource_) {

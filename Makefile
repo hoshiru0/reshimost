@@ -29,7 +29,7 @@ $(TARGET): $(OBJ_SUBDIRS) $(OBJ_FILES)
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	$(CC) -MMD -MP $(CPPFLAGS) -c $< -o $@
 
-build/glad/glad.o: glad/src/glad.c
+build/glad/glad.o: glad/src/glad.cpp
 	$(CC) -MMD -MP $(CPPFLAGS) -c $< -o $@
 
 $(OBJ_SUBDIRS):

@@ -2,7 +2,7 @@
 #include "../input.hpp"
 
 #include "../gl/shader.hpp"
-#include <glad/glad.h>
+#include <glad/glad.hpp>
 
 static Shader tshader {
 R"(#version 300 es
