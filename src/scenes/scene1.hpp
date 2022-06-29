@@ -8,15 +8,15 @@
 struct Scene1 : Scene {
     std::weak_ptr<Triangle> current;
     Scene1() {
-        createEntity<Test>();
+        //createEntity<Test>();
         //createEntity<Triangle>();
         current = createEntity<Triangle>();
     }
 
     void update() {
         if (input.getMouseLeft()) {
-            glm::vec3 position;
-            float rotation;
+            glm::vec3 position {};
+            float rotation {};
             if (auto c = current.lock()) {
                 position = c->position;
                 rotation = c->rotation;

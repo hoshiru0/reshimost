@@ -24,7 +24,7 @@ in vec3 color;
 uniform float time;
 
 void main() {
-    FragCoord = vec4(color.x, color.y + cos(time * 5.f)/2.0f+0.3f, color.z + cos(time * 5.f)/2.0f+0.3f, 1.0f);
+    FragCoord = vec4(color.x + sin(time * 5.f)/2.0f+0.5f, color.y, color.z, 1.0f);
 })"
 };
 
@@ -69,5 +69,4 @@ void Triangle::move() {
         return;
     }
     rotation += delta_time * 500.f;
-    
 }

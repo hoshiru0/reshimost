@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <string.h>
 
-template<typename T, bool swap_remove = false>
+template<typename T, bool swap_remove = false, bool use_realloc = false>
 class SmartVector {
     uint32_t size_ {};
     uint32_t capacity_ {16};
@@ -101,9 +101,17 @@ public:
     }
 
     void realloc() {
-        data_ = (T*)::realloc((void*)data_, sizeof(T)*capacity_);
-        //std::cout << size() << std::endl;
-        //(std::cout << (void*) data_ << std::endl;
+        if constexpr (use_realloc) {
+            data_ = (T*)::realloc((void*)data_, sizeof(T)*capacity_);
+        } else {
+            T* newdata = (T*) malloc(sizeof(T)*capacity_);
+            for (uint32_t i{}; i<size_; i++) {
+                new (newdata+i) T (std::move(data_[i]));
+                data_[i].~T();
+            }
+            free(data_);
+            data_ = newdata;
+        }
     }
 
     void reserve(uint32_t n) {
@@ -122,11 +130,12 @@ public:
         realloc();
     }
 
-    void push_back(const T& value) {
+    auto& push_back(const T& value) {
         if (size_ == capacity_) {
             grow();
         }
-        memcpy(data_+size_++, &value, sizeof(T));
+
+        return *(new (data_+size_++) T (value));
     }
 
     template<bool call_destr = true>
@@ -154,10 +163,10 @@ public:
             new (it) T (std::move(*--this->end()));
             //memcpy(it, --this->end(), sizeof(T));
         } else {
-            /*for (;it!=this->end()-1; it++) {
+            for (;it!=this->end()-1; it++) {
                 *it = *(it+1);
-            }*/
-            memmove(it, it+1, sizeof(T)*(--this->end()-it));
+            }
+            //memmove(it, it+1, sizeof(T)*(--this->end()-it));
         }
         pop_back<false>();
         

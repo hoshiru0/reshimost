@@ -49,11 +49,6 @@ public:
 
     template<bool shared = false, typename T>
     std::conditional_t<shared, std::shared_ptr<VBO>, VBO> setAttribute(std::initializer_list<const char*>, std::initializer_list<T> buffer, uint32_t draw_type = 0x88E4);
-    /*VBO setAttribute(const char* name, std::initializer_list<float> buffer, bool dynamic = false, uint32_t type = 0x1406);
-    VBO setAttribute(std::initializer_list<const char*> arr, std::initializer_list<float> buffer, bool dynamic = false, uint32_t type = 0x1406);
-    std::shared_ptr<VBO> setSharedAttribute(std::initializer_list<const char*> arr, std::initializer_list<float> buffer, bool dynamic = false, uint32_t type = 0x1406);
-    std::shared_ptr<VBO> setSharedAttribute(const char* name, std::initializer_list<float> buffer, bool dynamic = false, uint32_t type = 0x1406);*/
-
     void uniformMat4f(const char* name, glm::mat4& m);
     void uniform1f(const char* name, float v);
 
