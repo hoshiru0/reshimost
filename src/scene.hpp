@@ -1,9 +1,9 @@
 #pragma once
 #include <memory>
 
-#include "smartvector.hpp"
-#include "entity.hpp"
-#include "camera.hpp"
+#include <smartvector.hpp>
+#include <entity.hpp>
+#include <camera.hpp>
 
 extern double delta_time;
 extern double current_time;

@@ -2,8 +2,8 @@
 #include <memory>
 #include <glm/ext.hpp>
 
-#include "transform.hpp"
-#include "window.hpp"
+#include <transform.hpp>
+#include <window.hpp>
 #include <iostream>
 
 struct Camera : Transform {

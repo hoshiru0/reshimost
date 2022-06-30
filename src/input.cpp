@@ -1,9 +1,9 @@
 #include <GLFW/glfw3.h>
 #include <array>
 
-#include "input.hpp"
-#include "window.hpp"
-#include "utility.hpp"
+#include <input.hpp>
+#include <window.hpp>
+#include <utility.hpp>
 
 Input input;
 

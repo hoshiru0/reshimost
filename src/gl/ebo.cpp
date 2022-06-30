@@ -1,4 +1,4 @@
-#include "ebo.hpp"
+#include <gl/ebo.hpp>
 #include <glad/glad.hpp>
 
 EBO::EBO() {

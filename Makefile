@@ -13,7 +13,7 @@ OBJ_FILES += build/glad/glad.o
 SRC_SUBDIRS := $(shell find $(SRC_DIR) -type d)
 OBJ_SUBDIRS := $(patsubst $(SRC_DIR)%,$(OBJ_DIR)%,$(SRC_SUBDIRS)) build/glad/
 
-CPPFLAGS += -Wall -Wextra -pedantic -std=c++20 -I glad/include -Wno-unused -O3
+CPPFLAGS += -Wall -Wextra -pedantic -std=c++20 -I glad/include -I src/ -Wno-unused -O3 
 LDFLAGS += -lglfw -lGL 
 
 .PHONY: all clean segf

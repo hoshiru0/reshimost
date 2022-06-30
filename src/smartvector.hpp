@@ -81,7 +81,7 @@ public:
     }
 
     [[nodiscard]] const iterator cend() {
-        return iterator(data_);
+        return end();
     }
 
     [[nodiscard]] T* data() const {
@@ -158,18 +158,14 @@ public:
     }
 
     void erase(iterator it) {
-        it->~T();
         if constexpr (swap_remove) {
-            new (it) T (std::move(*--this->end()));
-            //memcpy(it, --this->end(), sizeof(T));
+            *it = std::move(*--this->end());
         } else {
             for (;it!=this->end()-1; it++) {
-                *it = *(it+1);
+                *it = std::move(*(it+1));
             }
-            //memmove(it, it+1, sizeof(T)*(--this->end()-it));
         }
-        pop_back<false>();
-        
+        pop_back();
     }
 
     void clear() {

@@ -1,4 +1,4 @@
-#include "../entity.hpp"
+#include <entity.hpp>
 
 struct Test : Entity {
     Test();

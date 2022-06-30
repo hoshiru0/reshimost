@@ -1,8 +1,10 @@
 #pragma once
-#include "../entity.hpp"
+
 #include <initializer_list>
 #include <iostream>
-#include "../scene.hpp"
+
+#include <entity.hpp>
+#include <scene.hpp>
 
 struct Triangle : Entity {
     Triangle();

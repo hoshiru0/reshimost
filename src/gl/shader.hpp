@@ -6,9 +6,9 @@
 #include <unordered_map>
 #include <glm/mat4x4.hpp>
 
-#include "../smartvector.hpp"
-#include "../utility.hpp"
-#include "vbo.hpp"
+#include <smartvector.hpp>
+#include <utility.hpp>
+#include <gl/vbo.hpp>
 
 template<auto... s>
 using VData = std::initializer_list<CustomTuple<std::array<float, s>...>>;

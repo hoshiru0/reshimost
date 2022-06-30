@@ -1,4 +1,4 @@
-#include "vao.hpp"
+#include <gl/vao.hpp>
 #include <glad/glad.hpp>
 
 VAO::VAO() {

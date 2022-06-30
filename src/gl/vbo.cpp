@@ -1,6 +1,7 @@
-#include "vbo.hpp"
-#include <glad/glad.hpp>
 #include <iostream>
+
+#include <vbo.hpp>
+#include <glad/glad.hpp>
 
 VBO::VBO() {
     create();

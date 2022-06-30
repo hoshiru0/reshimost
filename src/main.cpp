@@ -1,10 +1,10 @@
 #include <glad/glad.hpp>
 #include <GLFW/glfw3.h>
 
-#include "utility.hpp"
-#include "gl/shader.hpp"
-#include "scene.hpp"
-#include "scenes/scene1.hpp"
+#include <utility.hpp>
+#include <gl/shader.hpp>
+#include <scene.hpp>
+#include <scenes/scene1.hpp>
 
 void init_glad() {
     glfwSwapInterval(1);

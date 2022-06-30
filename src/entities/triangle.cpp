@@ -1,7 +1,7 @@
-#include "triangle.hpp"
-#include "../input.hpp"
+#include <triangle.hpp>
+#include <input.hpp>
 
-#include "../gl/shader.hpp"
+#include <gl/shader.hpp>
 #include <glad/glad.hpp>
 
 static Shader tshader {

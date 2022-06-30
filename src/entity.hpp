@@ -1,11 +1,11 @@
 #pragma once
 #include <cstdint>
 
-#include "camera.hpp"
-#include "transform.hpp"
-#include "gl/shader.hpp"
-#include "gl/vao.hpp"
-#include "gl/vbo.hpp"
+#include <camera.hpp>
+#include <transform.hpp>
+#include <gl/shader.hpp>
+#include <gl/vao.hpp>
+#include <gl/vbo.hpp>
 
 struct Entity : Transform {
     inline static uint32_t entity_count {};

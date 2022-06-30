@@ -3,7 +3,6 @@
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/quaternion.hpp>
-#include <iostream>
 
 struct Transform {
     //glm::mat4 transform { 1.f };
