@@ -6,14 +6,17 @@
 #include <gl/shader.hpp>
 #include <gl/vao.hpp>
 #include <gl/vbo.hpp>
+#include <gl/texture.hpp>
 
 struct Entity : Transform {
     inline static uint32_t entity_count {};
     uint32_t index;
     Shader* shader;
+    Texture* texture;
     VAO vao;
     std::shared_ptr<VBO> shared_vbo_vertex;
     std::shared_ptr<VBO> shared_vbo_color;
+    
 
     Entity();
 

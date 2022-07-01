@@ -3,7 +3,6 @@
 
 #include <input.hpp>
 #include <window.hpp>
-#include <utility.hpp>
 
 Input input;
 

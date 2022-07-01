@@ -3,14 +3,18 @@
 #include <initializer_list>
 
 struct VBO {
-    uint32_t vbo {};
+    uint32_t id {};
     VBO();
     VBO(uint32_t vbo);
-    VBO(VBO&& vbo_);
-    VBO& operator=(VBO&& vbo_);
+    VBO(VBO&& other);
+    VBO& operator=(VBO&& other);
+    
+    VBO(const VBO &other) = delete;
+	VBO& operator=(const VBO &other) = delete;
+
     void create(void);
     void destroy(void);
-    void bind(void);
+    void use(void);
     void unbind(void);
     ~VBO();
 

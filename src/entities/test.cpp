@@ -1,4 +1,4 @@
-#include <test.hpp>
+#include <entities/test.hpp>
 
 
 Test::Test() {}

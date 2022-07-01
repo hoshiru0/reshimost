@@ -1,11 +1,14 @@
 #pragma once
 #include <memory>
-#include "../scene.hpp"
-#include "../entities/triangle.hpp"
-#include "../input.hpp"
-#include "../entities/test.hpp"
+
+#include <scene.hpp>
+#include <entities/triangle.hpp>
+#include <input.hpp>
+#include <entities/test.hpp>
+#include <textureloader.hpp>
 
 struct Scene1 : Scene {
+    TextureLoader<"gentoo"> textures;
     std::weak_ptr<Triangle> current;
     Scene1() {
         //createEntity<Test>();

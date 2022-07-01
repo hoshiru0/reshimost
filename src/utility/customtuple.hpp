@@ -1,47 +1,5 @@
 #pragma once
-#include <iostream>
 
-#define IS_FROM_TEMPLATE(NAME, L1, L2) \
-template<template<L1> typename, typename> \
-struct is_from_##NAME##_template : std::false_type {}; \
-template<template<L1> typename Tm, L1> \
-struct is_from_##NAME##_template<Tm, Tm<L2>> : std::true_type {}; \
-template<template<L1> typename Tm, typename T> \
-inline constexpr bool is_from_##NAME##_template_v = is_from_##NAME##_template<Tm, T>::value;
-
-IS_FROM_TEMPLATE(ts, typename... Ts, Ts...);
-IS_FROM_TEMPLATE(auto, auto... Vs, Vs...);
-
-template<std::size_t e = 1, typename... S> 
-requires std::conjunction_v<std::is_convertible<S, std::string_view>...>
-void terminate(const S... str) {
-    if constexpr (sizeof...(S) > 0)
-        (std::operator<<((1 ? std::cerr : std::cout) << str, " "), ...) << "\n";
-    
-    std::exit(e);
-}
-
-// Overload
-template<typename... Ts> struct overloaded : Ts... { using Ts::operator()...; };
-template<class... Ts> overloaded(Ts...) -> overloaded<Ts...>;
-
-#define validexpr(EXPR) overloaded { \
-        [] <typename = void> requires requires() { \
-            EXPR; \
-        } () consteval { \
-            return true; \
-        }, \
-        [] <typename = void> () consteval { \
-            return false; \
-        } \
-    }() 
-
-
-#define evalif_validexpr(EXPR, ...) if constexpr (validexpr(EXPR)) { \
-    EXPR; \
-} else { \
-   __VA_ARGS__; \
-}
 
 template<typename... Ts>
 struct CustomTuple {

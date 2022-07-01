@@ -1,40 +1,45 @@
 #include <iostream>
 
-#include <vbo.hpp>
+#include <gl/vbo.hpp>
 #include <glad/glad.hpp>
 
 VBO::VBO() {
     create();
 }
-VBO::VBO(uint32_t vbo) : vbo(vbo) {}
 
-VBO::VBO(VBO&& vbo_) : vbo(vbo_.vbo) {
-    vbo_.vbo = 0;
+VBO::VBO(uint32_t otherid) : id(otherid) {
 }
-VBO& VBO::operator=(VBO&& vbo_) {
-    vbo = vbo_.vbo;
-    vbo_.vbo = 0;
+
+VBO::VBO(VBO&& other) : id(other.id) {
+    other.id = 0;
+}
+
+VBO& VBO::operator=(VBO&& other) {
+    destroy();
+    id = other.id;
+    other.id = 0;
     return *this;
 }
 
 void VBO::create() {
-    glGenBuffers(1, &vbo);
-    std::cout << "create vbo: " << vbo << std::endl;
+    glGenBuffers(1, &id);
+    std::cout << "create vbo: " << id << std::endl;
 }
 
 void VBO::destroy() {
-    std::cout << "destroy vbo: " << vbo << std::endl;
-    glDeleteBuffers(1, &vbo);
-}
-
-VBO::~VBO() {
-    if (vbo) {
-        destroy();
+    if (id) {
+        std::cout << "destroy vbo: " << id << std::endl;
+        glDeleteBuffers(1, &id);
+        id = 0;
     }
 }
 
-void VBO::bind() {
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+VBO::~VBO() {
+    destroy();
+}
+
+void VBO::use() {
+    glBindBuffer(GL_ARRAY_BUFFER, id);
 }
 
 void VBO::unbind() {
@@ -43,7 +48,7 @@ void VBO::unbind() {
 
 template<typename T>
 void VBO::bufferData(std::initializer_list<T> l, uint32_t draw_type) {
-    bind();
+    use();
     glBufferData(GL_ARRAY_BUFFER, l.size() * sizeof(T), l.begin(), draw_type);
 }
 

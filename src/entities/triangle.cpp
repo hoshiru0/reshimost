@@ -1,5 +1,6 @@
-#include <triangle.hpp>
+#include <entities/triangle.hpp>
 #include <input.hpp>
+#include <gl/texture.hpp>
 
 #include <gl/shader.hpp>
 #include <glad/glad.hpp>
@@ -37,6 +38,7 @@ static std::initializer_list<float> vertices {
 
 
 Triangle::Triangle() {
+    Entity::texture = &textures<"triangle">;
     Entity::shader = &tshader;
 }
 

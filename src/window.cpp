@@ -1,5 +1,5 @@
 #include <window.hpp>
-#include <utility.hpp>
+#include <utility/terminate.hpp>
 #include <GLFW/glfw3.h>
 
 //auto window = std::make_unique<Window>("hakugame");

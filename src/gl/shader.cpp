@@ -1,6 +1,7 @@
-#include <shader.hpp>
+#include <gl/shader.hpp>
 #include <glad/glad.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <utility/terminate.hpp>
 
 Shader::Shader(const char* vSource_, const char* fSource_) : vSource(vSource_), fSource(fSource_) {
     list.push_back(this);
@@ -107,7 +108,7 @@ std::conditional_t<shared, std::shared_ptr<VBO>, VBO> Shader::setAttribute(std::
             weakptr = vbo;
             vbo->bufferData(buffer, draw_type);
         } else {
-            vbo->bind();
+            vbo->use();
         }
     } else {
         vbo.bufferData(buffer, draw_type);

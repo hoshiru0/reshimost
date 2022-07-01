@@ -1,16 +1,16 @@
 #pragma once
 #include <memory>
 
-#include <smartvector.hpp>
+#include <utility/smartvector.hpp>
 #include <entity.hpp>
 #include <camera.hpp>
+#include <textureloader.hpp>
 
 extern double delta_time;
 extern double current_time;
 
 struct Scene {
     SmartVector<std::shared_ptr<Entity>, true> entities;
-
     template<typename T>
     std::shared_ptr<T> createEntity() {
         auto e = std::make_shared<T>();
