@@ -58,10 +58,10 @@ void Shader::compile() {
         case GL_FLOAT_VEC2:
             size = 2;
             break;
+        case GL_SAMPLER_2D:
         case GL_FLOAT:
             size = 1;
             break;
-        
         default:
             std::cerr << "udentified shader type: " << type << std::endl;
             break;
@@ -152,6 +152,14 @@ void Shader::uniform1f(const char* name, float v) {
     if (auto it = uniforms.find(name); it != uniforms.end()) {
         glUniform1f(it->second.location, v);
     } 
+}
+
+void Shader::uniform1i(const char* name, int v) {
+    if (auto it = uniforms.find(name); it != uniforms.end()) {
+        glUniform1i(it->second.location, v);
+    } else {
+        std::cout << "uniform not found " << name << std::endl;
+    }
 }
 
 uint32_t Shader::getProgram() const {

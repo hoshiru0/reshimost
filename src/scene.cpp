@@ -36,7 +36,7 @@ void Scene::run() {
 
         Shader::forEach([] (Shader* s) {
             s->use();
-            s->uniform1f("time", current_time);
+            s->uniform1f("u_time", current_time);
         });
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
