@@ -6,5 +6,6 @@ glm::mat4 Transform::getMatrix() {
     rotation = fmod(rotation, 360.f);
     m = glm::translate(m, position);
     m = glm::rotate(m, glm::radians(rotation), glm::vec3(0.0f, 0.0f, 1.0f));
+    m = glm::scale(m, scale);
     return m;
 }

@@ -7,7 +7,7 @@
 struct Transform {
     //glm::mat4 transform { 1.f };
 
-    glm::vec3 scale {};
+    glm::vec3 scale {1, 1, 1};
     float rotation {};
     glm::vec3 position {};
 
