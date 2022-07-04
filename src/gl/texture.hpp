@@ -8,7 +8,6 @@ struct Texture {
     uint32_t id;
     uint32_t width;
     uint32_t height;
-    std::unique_ptr<uint8_t[]> data;
 
     Texture();
     Texture(uint32_t texture);

@@ -156,6 +156,7 @@ void Shader::uniform1f(const char* name, float v) {
 
 void Shader::uniform1i(const char* name, int v) {
     if (auto it = uniforms.find(name); it != uniforms.end()) {
+        std::cout << v << std::endl;
         glUniform1i(it->second.location, v);
     } else {
         std::cout << "uniform not found " << name << std::endl;

@@ -17,7 +17,7 @@ void Texture::create() {
 }
 
 void Texture::bind() {
-    glActiveTexture(GL_TEXTURE0);
+//    glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, id);
 }
 
@@ -48,27 +48,47 @@ void Texture::bindImage(std::string_view imagestr) {
     png_byte bit_depth = png_get_bit_depth(png, info);
     
     uint32_t row_size = png_get_rowbytes(png, info);
-    data = std::make_unique<uint8_t[]>(height * row_size * sizeof(png_byte));
-    png_bytepp row_pointers = (png_bytepp)malloc(height * sizeof(png_bytep));
+    png_bytep data = (png_bytep) malloc(height * row_size * sizeof(png_byte));
+    png_bytepp row_pointers = (png_bytepp) malloc(height * sizeof(png_bytep));
 
     for (int i = 0; i < height; i++) {
-        row_pointers[i] = data.get() + (i * row_size);
+        row_pointers[i] = data + (i * row_size);
     }
 
     png_read_image(png, row_pointers);
+
+    int alpha;
+    switch (png_get_color_type(png, info)) {
+        case PNG_COLOR_TYPE_RGBA:
+            alpha = GL_RGBA;
+            break;
+        case PNG_COLOR_TYPE_RGB:
+            alpha = GL_RGB;
+            break;
+        default:
+            terminate("Color type", std::to_string(png_get_color_type(png, info)), "not supported!\n");
+    }
 
     fclose(fp);
     free(row_pointers);
     png_destroy_read_struct(&png, &info, NULL);
 
     bind();
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data.get());
+    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
+    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, alpha, GL_UNSIGNED_BYTE, data);
     glGenerateMipmap(GL_TEXTURE_2D);
+    //glEnable(GL_BLEND);
+    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     
+    free(data);
     //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texture.width, texture.height, 0, GL_RGB, GL_UNSIGNED_BYTE, texture.data);
 
 }

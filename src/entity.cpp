@@ -61,13 +61,13 @@ void Entity::update() {
 }
 
 void Entity::updateEntity() {
+    texture->bind();
     shader->use();
     glm::mat4 mvp = camera->getMatrix() * getMatrix();
     // * camera->getMatrix() *
     shader->uniformMat4f("u_MVP", mvp);
-    shader->uniform1i("u_texture", texture->id);
-    texture->bind();
-
+    //shader->uniform1i("u_texture", texture->id);
+    
     vao.bind();
     update();
 }
