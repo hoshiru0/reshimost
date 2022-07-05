@@ -51,7 +51,7 @@ void Triangle::move() {
         return;
     }
     if (input.getKeyDown(KEY_C)) {
-        current_distro = (++current_distro % avaliable_distros.size());
+        current_distro = ((current_distro+1) % avaliable_distros.size());
         Entity::texture = *(avaliable_distros.begin()+current_distro);
     }
     //rotation += delta_time * 500.f;
