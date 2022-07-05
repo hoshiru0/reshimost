@@ -8,7 +8,7 @@
 #include <textureloader.hpp>
 
 struct Scene1 : Scene {
-    TextureLoader<"gentoo"> textures;
+    TextureLoader<"gentoo", "arch", "debian"> textures;
     std::weak_ptr<Triangle> current;
     Scene1() {
         //createEntity<Test>();
@@ -18,15 +18,13 @@ struct Scene1 : Scene {
 
     void update() {
         if (input.getMouseLeft()) {
-            glm::vec3 position {};
-            float rotation {};
-            if (auto c = current.lock()) {
-                position = c->position;
-                rotation = c->rotation;
-            }
             auto ptr = createEntity<Triangle>();
-            ptr->position = position;
-            ptr->rotation = rotation;
+            if (auto c = current.lock()) {
+                ptr->position = c->position;
+                ptr->rotation = c->rotation;
+                ptr->scale = c->scale;
+                ptr->texture = c->texture;
+            }
             current = ptr;
         } 
         if (input.getMouseRight()) {

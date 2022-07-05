@@ -3,42 +3,42 @@
 #include <entity.hpp>
 #include <scene.hpp>
 
-Shader entity_shader {
+static Shader entity_shader {
 R"(#version 300 es
 precision mediump float;
 in vec2 a_vert;
-in vec3 a_color;
+in vec2 a_tex_coord;
 
-out vec3 color;
+out vec2 tex_coord;
 
 uniform mat4 u_MVP;
 
 void main() {
-    gl_Position = u_MVP * vec4(a_vert, 0.0f, 1.0f);
-    color = a_color;
+    tex_coord = a_tex_coord;
+    gl_Position = u_MVP * vec4(a_vert, 0.0, 1.0);
 })",
 R"(#version 300 es
 precision mediump float;
-out vec4 FragCoord;
-in vec3 color;
-uniform float time;
+
+in vec2 tex_coord;
+out vec4 frag_color;
+
+uniform sampler2D u_texture;
+uniform float u_time;
 
 void main() {
-    FragCoord = vec4(color.x + cos(time)/2.0f+0.5, color.y, color.z, 1.0f);
+    frag_color = texture(u_texture, tex_coord);
+    if (frag_color.a < 0.5) {
+        discard;
+    }
 })"
 };
 
 static std::initializer_list<float> entity_vertices  {
-    -0.5f, -0.5f,
-    -0.5f,  0.5f,
-    0.5f,  0.5f,
-    0.5f, -0.5f
-};
-static std::initializer_list<float> entity_color  {
-    1.f, 0.0f, 0.0f,
-    0.0f, 1.0f, 0.0f,
-    0.0f,  0.0f, 1.0f,
-    1.0f,  0.0f, 1.0f
+    -0.5f, -0.5f,  0.0f, 1.0f,
+    0.5f, -0.5f,   1.0f, 1.0f,
+    0.5f, 0.5f,    1.0f, 0.0f,
+    -0.5f, 0.5f,   0.0f, 0.0f
 };
 
 Entity::Entity() : shader(&entity_shader) {
@@ -52,8 +52,7 @@ void Entity::initEntity() {
 }
 
 void Entity::init() { // default initialization
-    shared_vbo_vertex = shader->setAttribute<true>({"a_vert"}, entity_vertices);
-    shared_vbo_color = shader->setAttribute<true>({"a_color"}, entity_color);
+    shared_vbo_vertex = shader->setAttribute<true>({"a_vert", "a_tex_coord"}, entity_vertices);
 }
 
 void Entity::update() {
@@ -64,9 +63,7 @@ void Entity::updateEntity() {
     texture->bind();
     shader->use();
     glm::mat4 mvp = camera->getMatrix() * getMatrix();
-    // * camera->getMatrix() *
     shader->uniformMat4f("u_MVP", mvp);
-    //shader->uniform1i("u_texture", texture->id);
     
     vao.bind();
     update();
