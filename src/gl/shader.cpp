@@ -2,6 +2,7 @@
 #include <glad/glad.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <utility/terminate.hpp>
+#include <utility/validexpr.hpp>
 
 Shader::Shader(const char* vSource_, const char* fSource_) : vSource(vSource_), fSource(fSource_) {
     list.push_back(this);
@@ -138,28 +139,26 @@ std::conditional_t<shared, std::shared_ptr<VBO>, VBO> Shader::setAttribute(std::
         glEnableVertexAttribArray(info.index);
         c += size;
     }
-    
     return vbo;
 }
 
-void Shader::uniformMat4f(const char* name, glm::mat4 &m) {
+template<typename T>
+void Shader::uniform(const char* name, const T& value) {
     if (auto it = uniforms.find(name); it != uniforms.end()) {
-        glUniformMatrix4fv(it->second.location, 1, GL_FALSE, glm::value_ptr(m));
-    }
-}
-
-void Shader::uniform1f(const char* name, float v) {
-    if (auto it = uniforms.find(name); it != uniforms.end()) {
-        glUniform1f(it->second.location, v);
-    } 
-}
-
-void Shader::uniform1i(const char* name, int v) {
-    if (auto it = uniforms.find(name); it != uniforms.end()) {
-        std::cout << v << std::endl;
-        glUniform1i(it->second.location, v);
-    } else {
-        std::cout << "uniform not found " << name << std::endl;
+        overloaded {
+            [] (const glm::mat4& v, int loc) {
+                glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(v));
+            },
+            [] (const glm::vec3& v, int loc) {
+                glUniform3fv(loc, 1, glm::value_ptr(v));
+            },
+            [] (const glm::vec2& v, int loc) {
+                glUniform2fv(loc, 1, glm::value_ptr(v));
+            },
+            [] (const float& v, int loc) {
+                glUniform1f(loc, v);
+            }
+        }(value, it->second.location);
     }
 }
 
@@ -187,3 +186,7 @@ Shader::~Shader() {
 
 template VBO Shader::setAttribute<false>(std::initializer_list<const char*>, std::initializer_list<float>, uint32_t);
 template std::shared_ptr<VBO> Shader::setAttribute<true>(std::initializer_list<const char*>, std::initializer_list<float>, uint32_t);
+template void Shader::uniform(const char*, const int&);
+template void Shader::uniform(const char*, const glm::vec2&);
+template void Shader::uniform(const char*, const glm::mat4&);
+template void Shader::uniform(const char*, const float&);

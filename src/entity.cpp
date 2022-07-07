@@ -23,11 +23,12 @@ precision mediump float;
 in vec2 tex_coord;
 out vec4 frag_color;
 
-uniform sampler2D u_texture;
+uniform sampler2D u_tex;
 uniform float u_time;
+uniform vec2 u_tex_size;
 
 void main() {
-    frag_color = texture(u_texture, tex_coord);
+    frag_color = texture(u_tex, tex_coord);
     if (frag_color.a < 0.5) {
         discard;
     }
@@ -63,7 +64,7 @@ void Entity::updateEntity() {
     texture->bind();
     shader->use();
     glm::mat4 mvp = camera->getMatrix() * getMatrix();
-    shader->uniformMat4f("u_MVP", mvp);
+    shader->uniform("u_MVP", mvp);
     
     vao.bind();
     update();
