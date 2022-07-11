@@ -19,11 +19,12 @@ struct Entity : Transform {
     Entity();
 
     void initEntity(void);
-    virtual void init();
+    virtual void initRender();
 
     ~Entity() {}
 
     void updateEntity(void);
+    virtual void updateRender(void);
     virtual void update(void);
 
     void destroy(void);

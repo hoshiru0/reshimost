@@ -9,7 +9,25 @@ Texture::Texture() {
     create();
 }
 
+Texture::Texture(std::string_view str) {
+    create();
+    bindImage(str);
+}
+
 Texture::Texture(uint32_t texture) : id(texture) {}
+
+Texture& Texture::operator=(Texture& other) {
+    width = other.width;
+    height = other.height;
+    id = other.id;
+    other.id = 0;
+    return *this;
+}
+Texture& Texture::operator=(const char* name) {
+    destroy();
+    create();
+    bindImage(name);
+}
 
 void Texture::create() {
     glGenTextures(1, &id);

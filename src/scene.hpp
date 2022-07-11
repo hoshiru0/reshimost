@@ -9,7 +9,12 @@
 extern double delta_time;
 extern double current_time;
 
+struct Textures {
+
+};
+
 struct Scene {
+    Textures textures;
     SmartVector<std::shared_ptr<Entity>, true> entities;
     template<typename T>
     std::shared_ptr<T> createEntity() {

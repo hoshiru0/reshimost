@@ -6,9 +6,11 @@
 #include <input.hpp>
 #include <entities/test.hpp>
 #include <textureloader.hpp>
+#include <sprite.hpp>
 
 struct Scene1 : Scene {
-    TextureLoader<"gentoo", "arch", "debian"> textures;
+    Texture gentoo_texture {"gentoo"};
+    //Sprite gentoo {"gentoo"};
     std::weak_ptr<Triangle> current;
     Scene1() {
         //createEntity<Test>();

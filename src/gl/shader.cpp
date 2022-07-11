@@ -2,7 +2,6 @@
 #include <glad/glad.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <utility/terminate.hpp>
-#include <utility/validexpr.hpp>
 
 Shader::Shader(const char* vSource_, const char* fSource_) : vSource(vSource_), fSource(fSource_) {
     list.push_back(this);
@@ -142,24 +141,20 @@ std::conditional_t<shared, std::shared_ptr<VBO>, VBO> Shader::setAttribute(std::
     return vbo;
 }
 
-template<typename T>
-void Shader::uniform(const char* name, const T& value) {
-    if (auto it = uniforms.find(name); it != uniforms.end()) {
-        overloaded {
-            [] (const glm::mat4& v, int loc) {
-                glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(v));
-            },
-            [] (const glm::vec3& v, int loc) {
-                glUniform3fv(loc, 1, glm::value_ptr(v));
-            },
-            [] (const glm::vec2& v, int loc) {
-                glUniform2fv(loc, 1, glm::value_ptr(v));
-            },
-            [] (const float& v, int loc) {
-                glUniform1f(loc, v);
-            }
-        }(value, it->second.location);
-    }
+void Shader::uniform(const char* name, const glm::mat4& v) {
+    glUniformMatrix4fv(uniforms[name].location, 1, GL_FALSE, glm::value_ptr(v));
+}
+
+void Shader::uniform(const char* name, const int v) {
+    glUniform1i(uniforms[name].location, v);
+}
+
+void Shader::uniform(const char* name, const glm::vec2& v) {
+    glUniform2fv(uniforms[name].location, 1, glm::value_ptr(v));
+}
+
+void Shader::uniform(const char* name, const float v) {
+    glUniform1f(uniforms[name].location, v);
 }
 
 uint32_t Shader::getProgram() const {
@@ -186,7 +181,3 @@ Shader::~Shader() {
 
 template VBO Shader::setAttribute<false>(std::initializer_list<const char*>, std::initializer_list<float>, uint32_t);
 template std::shared_ptr<VBO> Shader::setAttribute<true>(std::initializer_list<const char*>, std::initializer_list<float>, uint32_t);
-template void Shader::uniform(const char*, const int&);
-template void Shader::uniform(const char*, const glm::vec2&);
-template void Shader::uniform(const char*, const glm::mat4&);
-template void Shader::uniform(const char*, const float&);

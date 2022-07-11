@@ -46,8 +46,10 @@ public:
     template<bool shared = false, typename T>
     std::conditional_t<shared, std::shared_ptr<VBO>, VBO> setAttribute(std::initializer_list<const char*>, std::initializer_list<T> buffer, uint32_t draw_type = 0x88E4);
 
-    template<typename T>
-    void uniform(const char* name, const T& value);
+    void uniform(const char*, const int);
+    void uniform(const char*, const glm::vec2&);
+    void uniform(const char*, const glm::mat4&);
+    void uniform(const char*, const float);
 
     const AttribInfo& getAttribInfo(const char*) const;
     uint32_t getProgram(void) const;
