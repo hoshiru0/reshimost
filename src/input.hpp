@@ -122,14 +122,14 @@
 #define KEY_RIGHT_ALT 346
 #define KEY_RIGHT_SUPER 347
 #define KEY_MENU 348
+#define MOUSE_RIGHT 348
+#define MOUSE_LEFT 349
 #define KEY_LAST KEY_MENU
 
 struct Input {
     Input();
     bool getKey(int key);
     bool getKeyDown(int key);
-    bool getMouseLeft(void);
-    bool getMouseRight(void);
 };
 
 extern Input input;

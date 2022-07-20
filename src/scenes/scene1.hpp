@@ -21,7 +21,7 @@ struct Scene1 : Scene {
     }
 
     void update() {
-        if (input.getMouseLeft()) {
+        if (input.getKeyDown(MOUSE_LEFT)) {
             auto ptr = createEntity<Triangle>();
             if (auto c = current.lock()) {
                 ptr->position = c->position;
@@ -31,7 +31,7 @@ struct Scene1 : Scene {
             }
             current = ptr;
         } 
-        if (input.getMouseRight()) {
+        if (input.getKey(MOUSE_RIGHT)) {
             if (current_scene->entities.size() > 1) {
                 current_scene->entities.pop_back();
                 current = std::static_pointer_cast<Triangle>(current_scene->entities.back());
