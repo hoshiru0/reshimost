@@ -49,6 +49,7 @@ public:
     void uniform(const char*, const int);
     void uniform(const char*, const glm::vec2&);
     void uniform(const char*, const glm::mat4&);
+    void uniform(const char*, const glm::uvec2&);
     void uniform(const char*, const float);
 
     const AttribInfo& getAttribInfo(const char*) const;
@@ -57,3 +58,5 @@ public:
     void destroy(void);
     ~Shader();
 };
+
+extern Shader* current_shader;

@@ -20,7 +20,7 @@ struct Texture {
     void bindImage(std::string_view);
     void destroy(void);
 
-    void bind(void);
+    void use(void);
     void unbind(void);
     ~Texture();
 };

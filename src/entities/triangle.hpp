@@ -7,7 +7,11 @@
 #include <scene.hpp>
 
 struct Triangle : Entity {
-    Triangle();
+    Triangle(Scene*);
     void move(void);
     void update(void);
+    SpriteAnim forward;
+    SpriteAnim back;
+    SpriteAnim left;
+    SpriteAnim right;
 };

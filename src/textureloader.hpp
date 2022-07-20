@@ -1,3 +1,4 @@
+/*
 #pragma once
 #include <utility/fixedstring.hpp>
 #include <gl/texture.hpp>
@@ -13,3 +14,5 @@ struct TextureLoader {
         (textures<S>.destroy(), ...);
     }
 };
+
+*/

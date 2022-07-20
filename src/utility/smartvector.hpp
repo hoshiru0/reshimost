@@ -1,14 +1,14 @@
 #pragma once
-#include <iostream>
+#include <initializer_list>
+#include <iterator>
 #include <cstdint>
 #include <string.h>
 
 template<typename T, bool swap_remove = false, bool use_realloc = false>
 class SmartVector {
     uint32_t size_ {};
-    uint32_t capacity_ {16};
-    uint32_t min_capacity_ {16};
-    T* data_ {(T*)malloc(0)};
+    uint32_t capacity_ {};
+    T* data_ {};
 
 public:
     using iterator_category = std::forward_iterator_tag;
@@ -51,22 +51,47 @@ public:
 
     SmartVector(std::initializer_list<T> l) {
         capacity_ = l.size();
-        capacity_ = capacity_ < 16 ? 16 : capacity_;
-        min_capacity_ = capacity_;
         realloc();
-        for (auto& e : l) {
-            push_back(e);
+        for (auto& el : l) {
+            push_back(el);
         }
     }
+
+    SmartVector(SmartVector& other) {
+        *this = other;
+    }
+
+    SmartVector(SmartVector&& other) {
+        *this = std::move(other);
+    }
+
     SmartVector() {
-        capacity_ = 16;
-        min_capacity_ = 16;
+    }
+
+    SmartVector& operator=(SmartVector&& other) {
+        clear();
+        size_ = other.size_;
+        capacity_ = other.capacity_;
+        data_ = other.data_;
+
+        other.data_ = 0;
+        other.size_ = 0;
+        other.capacity_ = 0;
+        return *this;
+    }
+
+    SmartVector& operator=(SmartVector& other) {
+        clear();
+        capacity_ = other.capacity_;
         realloc();
+        for (const auto& el : other) {
+            push_back(el);
+        }
+        return *this;
     }
 
     [[nodiscard]] iterator begin() {
-        return iterator(data_);
-    }
+        return iterator(data_); }
 
     [[nodiscard]] iterator end() {
         return iterator(data_ + size_);
@@ -115,38 +140,31 @@ public:
     }
 
     void reserve(uint32_t n) {
-        min_capacity_ = n;
         capacity_ = n;
         realloc();
     }
 
-    void shrink() {
-        capacity_ = capacity_/2;
+    void shrink_to_fit() {
+        capacity_ = size_;
         realloc();
     }
 
     void grow() {
-        capacity_ *= 2;
+        if (capacity_) capacity_ *= 2;
+        else capacity_ = 1;
         realloc();
     }
 
-    auto& push_back(const T& value) {
-        if (size_ == capacity_) {
-            grow();
-        }
-
-        return *(new (data_+size_++) T (value));
+    T& push_back(T&& value) {
+        return emplace_back(std::forward<T>(value));
     }
 
-    template<bool call_destr = true>
+    T& push_back(const T& value) {
+        return emplace_back(value);
+    }
+
     void pop_back() {
-        if constexpr (call_destr) {
-            (*this)[size_-1].~T();
-        } 
-        size_--;
-        if (uint32_t c = (capacity_/4); capacity_ > min_capacity_ && size_ == c) {
-            shrink();
-        }
+        (*this)[--size_].~T();
     }
 
     template<typename... Ts>
@@ -155,6 +173,11 @@ public:
             grow();
         }
         return *(new (data_+size_++) T (std::forward<Ts>(args)...));
+    }
+
+    SmartVector copy() {
+        SmartVector copy {*this};
+        return copy;
     }
 
     void erase(iterator it) {
@@ -170,12 +193,15 @@ public:
 
     void clear() {
         for (uint32_t i{size_}; i>0; i--) {
-            this->pop_back();
+            pop_back();
         }
+        size_ = 0;
+        capacity_ = 0;
+        free(data_);
+        data_ = 0;
     }
 
     ~SmartVector() {
         clear();
-        free(data_);
     }
 };

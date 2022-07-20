@@ -5,11 +5,13 @@
 #include <entities/triangle.hpp>
 #include <input.hpp>
 #include <entities/test.hpp>
-#include <textureloader.hpp>
+//#include <textureloader.hpp>
+#include <spritesheet.hpp>
 #include <sprite.hpp>
 
 struct Scene1 : Scene {
-    Texture gentoo_texture {"gentoo"};
+    Texture atlas1 {"gentoo"};
+    
     //Sprite gentoo {"gentoo"};
     std::weak_ptr<Triangle> current;
     Scene1() {
@@ -25,7 +27,7 @@ struct Scene1 : Scene {
                 ptr->position = c->position;
                 ptr->rotation = c->rotation;
                 ptr->scale = c->scale;
-                ptr->texture = c->texture;
+                ptr->sprites = c->sprites;
             }
             current = ptr;
         } 

@@ -3,6 +3,8 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <utility/terminate.hpp>
 
+Shader* current_shader;
+
 Shader::Shader(const char* vSource_, const char* fSource_) : vSource(vSource_), fSource(fSource_) {
     list.push_back(this);
 }
@@ -95,6 +97,7 @@ void Shader::compile() {
 
 void Shader::use() {
     glUseProgram(program);
+    current_shader = this;
 }
 
 template<bool shared, typename T>
@@ -155,6 +158,10 @@ void Shader::uniform(const char* name, const glm::vec2& v) {
 
 void Shader::uniform(const char* name, const float v) {
     glUniform1f(uniforms[name].location, v);
+}
+
+void Shader::uniform(const char* name, const glm::uvec2& v) {
+    glUniform2uiv(uniforms[name].location, 1, glm::value_ptr(v));
 }
 
 uint32_t Shader::getProgram() const {

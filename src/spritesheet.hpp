@@ -1,11 +1,6 @@
 #include <sprite.hpp>
 
 struct SpriteSheet {
+    Texture texture;
 
-    Sprite getSprite() {
-    }
-
-    Sprite getAnimatedSprite() { 
-        
-    }
 };
