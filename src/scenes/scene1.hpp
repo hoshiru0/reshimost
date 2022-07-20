@@ -27,10 +27,9 @@ struct Scene1 : Scene {
                 ptr->position = c->position;
                 ptr->rotation = c->rotation;
                 ptr->scale = c->scale;
-                ptr->sprites = c->sprites;
             }
             current = ptr;
-        } 
+        }
         if (input.getKey(MOUSE_RIGHT)) {
             if (current_scene->entities.size() > 1) {
                 current_scene->entities.pop_back();

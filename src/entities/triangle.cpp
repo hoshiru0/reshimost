@@ -16,25 +16,7 @@ Triangle::Triangle(Scene* scene) {
         1./10
     };
 
-    back = {
-        texture,
-        {100, 100},
-        offsets<{0, 0}>
-    };
-
-    left = {
-        texture,
-        {100, 100},
-        offsets<{0, 0}>
-    };
-
-    right = {
-        texture,
-        {100, 100},
-        offsets<{0, 0}>
-    };
-
-    Entity::sprites = &forward;
+    setSpriteAnim(forward);
 }
 
 void Triangle::update() {
