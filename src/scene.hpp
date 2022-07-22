@@ -3,8 +3,6 @@
 #include <utility/smartvector.hpp>
 #include <entity.hpp>
 #include <camera.hpp>
-#include <textureloader.hpp>
-
 
 extern double delta_time;
 extern double current_time;

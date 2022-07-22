@@ -2,9 +2,7 @@
 
 extern double delta_time;
 
-SpriteAnim::SpriteAnim() {}
-
-SpriteAnim::SpriteAnim(Texture* texture, glm::uvec2 size, Offsets offsets, double speed) : sprite{texture, size}, offsets(offsets), speed(speed) {
+SpriteAnim::SpriteAnim(Texture* texture, glm::uvec2 size, Offsets offsets, double speed) : sprite(texture, size, {}), offsets(offsets), speed(speed) {
 
 }
 

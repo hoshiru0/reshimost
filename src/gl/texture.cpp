@@ -5,6 +5,8 @@
 #include <png.h>
 
 std::string imagepath = "img/";
+Texture* current_texture;
+
 Texture::Texture() {
     create();
 }
@@ -27,16 +29,17 @@ Texture& Texture::operator=(const char* name) {
     destroy();
     create();
     bindImage(name);
+    return *this;
 }
 
 void Texture::create() {
     glGenTextures(1, &id);
-    std::cout << "create texture " << id << "\n";
 }
 
 void Texture::use() {
 //    glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, id);
+    current_texture = this;
 }
 
 void Texture::bindImage(std::string_view imagestr) {
@@ -69,7 +72,7 @@ void Texture::bindImage(std::string_view imagestr) {
     png_bytep data = (png_bytep) malloc(height * row_size * sizeof(png_byte));
     png_bytepp row_pointers = (png_bytepp) malloc(height * sizeof(png_bytep));
 
-    for (int i = 0; i < height; i++) {
+    for (uint32_t i = 0; i < height; i++) {
         row_pointers[i] = data + (i * row_size);
     }
 

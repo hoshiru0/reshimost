@@ -9,7 +9,9 @@ struct Sprite {
     Texture* texture {};
     glm::uvec2 size {};
     glm::uvec2 offset {};
+
+    Sprite(Texture* texture, glm::uvec2 size, glm::vec2 offset);
+    Sprite(glm::uvec2 size, glm::vec2 offset);
     
     void use();
-
 };

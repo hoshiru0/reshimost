@@ -3,8 +3,6 @@
 #include <entity.hpp>
 #include <scene.hpp>
 
-
-
 static Shader entity_shader {
 R"(#version 300 es
 precision mediump float;
@@ -15,7 +13,8 @@ uniform mat4 u_MVP;
 void main() {
     tex_coord = a_tex_coord;
     gl_Position = u_MVP * vec4(a_vert, 0.f, 1.f);
-})",
+}
+)",
 R"(#version 300 es
 precision mediump float;
 in vec2 tex_coord;

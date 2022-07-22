@@ -26,3 +26,4 @@ struct Texture {
 };
 
 extern std::string imagepath;
+extern Texture* current_texture;

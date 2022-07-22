@@ -16,7 +16,6 @@ struct SpriteAnim {
     double speed;
     double timeline {};
 
-    SpriteAnim();
     SpriteAnim(Texture* texture, glm::uvec2 size, Offsets offsets, double speed = 1./24);
 
     void use();
