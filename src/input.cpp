@@ -20,6 +20,9 @@ static void mouse_button_callback(GLFWwindow* window, int button, int action, in
 }
 
 Input::Input() {
+}
+
+void Input::init() {
     GLFWwindow* windowptr = window.getGlfwWindowPtr();
     glfwSetKeyCallback(windowptr, key_callback);
     glfwSetMouseButtonCallback(windowptr, mouse_button_callback);

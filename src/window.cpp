@@ -1,6 +1,7 @@
 #include <window.hpp>
 #include <utility/terminate.hpp>
 #include <GLFW/glfw3.h>
+#include <input.hpp>
 
 //auto window = std::make_unique<Window>("hakugame");
 
@@ -25,6 +26,8 @@ Window::Window(const std::string_view title, const uint16_t w, const uint16_t h)
     glfwSetWindowSizeCallback(window, [] (GLFWwindow* wnd, int w, int h) {
         static_cast<Window*>(glfwGetWindowUserPointer(wnd))->onResize(w, h);
     });
+
+    input.init();
 }
 
 void Window::setSize(int w, int h) {

@@ -128,6 +128,7 @@
 
 struct Input {
     Input();
+    void init(void);
     bool getKey(int key);
     bool getKeyDown(int key);
 };
