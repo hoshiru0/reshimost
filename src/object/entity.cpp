@@ -76,7 +76,7 @@ void Entity::updateEntity() {
         sprites->use();
     }
     
-    glm::mat4 mvp = camera->getMatrix() * getMatrix();
+    glm::mat4 mvp = current_scene->camera.getMatrix() * transform.getMatrix();
     shader->uniform("u_MVP", mvp);
     
     vao.use();

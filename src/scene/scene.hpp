@@ -9,6 +9,7 @@ extern double current_time;
 
 struct Scene {
     //Textures textures;
+    Camera camera;
     SmartVector<std::shared_ptr<Entity>, true> entities;
     template<typename T>
     std::shared_ptr<T> createEntity() {

@@ -8,7 +8,7 @@
 std::unique_ptr<Scene> current_scene;
 
 void Scene::updateScene() {
-    camera->update();
+    camera.update();
     update();
     for (auto it = entities.end()-1; it >= entities.begin(); it--) {
         it->get()->updateEntity();

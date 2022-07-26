@@ -9,9 +9,5 @@ struct Transform {
     float rotation {};
     glm::vec3 position {};
 
-    virtual glm::mat4 getMatrix();
-
-    Transform() {
-        
-    }
+    glm::mat4 getMatrix();
 };

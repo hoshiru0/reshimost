@@ -10,9 +10,7 @@ void Scene1::update() {
     if (input.getKey(MOUSE_LEFT)) {
         auto ptr = createEntity<Pacman>();
         if (auto c = current.lock()) {
-            ptr->position = c->position;
-            ptr->rotation = c->rotation;
-            ptr->scale = c->scale;
+            ptr->transform = c->transform;
         }
         current = ptr;
     }

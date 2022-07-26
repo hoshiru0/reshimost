@@ -11,7 +11,8 @@
 #include <gl/texture.hpp>
 
 
-struct Entity : Transform {
+struct Entity {
+    Transform transform;
     inline static uint32_t entity_count {};
     uint32_t index;
     SpriteAnim* sprites {};

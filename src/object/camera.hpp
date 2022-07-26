@@ -4,27 +4,16 @@
 
 #include "transform.hpp"
 #include <gui/window.hpp>
-#include <iostream>
 
-struct Camera : Transform {
+struct Camera {
     float zoom = 0;
+    Transform transform;
     glm::mat4 projection;
 
-    Camera() {
-        position.z -= 1.f;
-        //transform = glm::translate(transform, glm::vec3(0.0f, 0.0f, -1.0f));
-    }
+    Camera();
 
-    glm::mat4 getMatrix() override {
-        return projection * Transform::getMatrix();
-    }
+    glm::mat4 getMatrix();
     
-    void update() {
-        float w = window.width/(200+(zoom*10));
-        float h = window.height/(200+(zoom*10));
-        projection = glm::ortho(-w, w, -h, h, 0.1f, 1000.0f);
-    }
+    void update();
 };
 
-
-inline std::unique_ptr<Camera> camera = std::make_unique<Camera>();
