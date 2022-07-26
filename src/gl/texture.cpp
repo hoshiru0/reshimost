@@ -1,7 +1,7 @@
 #include <glad/glad.hpp>
 #include <gl/texture.hpp>
 #include <iostream>
-#include <utility/terminate.hpp>
+#include <util/terminate.hpp>
 #include <png.h>
 
 std::string imagepath = "img/";

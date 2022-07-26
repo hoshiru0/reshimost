@@ -1,8 +1,7 @@
-#include <iostream>
+#include "scene.hpp"
 
-#include <scene.hpp>
-#include <window.hpp>
-#include <camera.hpp>
+#include <gui/window.hpp>
+#include <object/camera.hpp>
 
 #include <GLFW/glfw3.h>
 

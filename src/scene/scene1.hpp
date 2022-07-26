@@ -1,10 +1,7 @@
 #pragma once
 #include <memory>
 
-#include <scene.hpp>
-#include <input.hpp>
-#include <spritesheet.hpp>
-#include <sprite.hpp>
+#include "scene.hpp"
 
 class Pacman;
 

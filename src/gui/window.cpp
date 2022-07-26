@@ -1,7 +1,7 @@
-#include <window.hpp>
-#include <utility/terminate.hpp>
+#include <gui/window.hpp>
+#include <util/terminate.hpp>
 #include <GLFW/glfw3.h>
-#include <input.hpp>
+#include <control/input.hpp>
 
 //auto window = std::make_unique<Window>("hakugame");
 

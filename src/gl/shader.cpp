@@ -1,7 +1,7 @@
 #include <gl/shader.hpp>
 #include <glad/glad.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <utility/terminate.hpp>
+#include <util/terminate.hpp>
 
 Shader* current_shader;
 

@@ -1,5 +1,6 @@
 #include "scene1.hpp"
-#include <entities/pacman.hpp>
+#include <object/pacman.hpp>
+#include <control/input.hpp>
 
 Scene1::Scene1() {
     current = createEntity<Pacman>();

@@ -1,9 +1,10 @@
 #pragma once
 #include <cstdint>
 
-#include <camera.hpp>
-#include <transform.hpp>
-#include <spriteanim.hpp>
+#include "camera.hpp"
+#include "transform.hpp"
+
+#include <sprite/spriteanim.hpp>
 #include <gl/shader.hpp>
 #include <gl/vao.hpp>
 #include <gl/vbo.hpp>

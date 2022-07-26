@@ -6,7 +6,7 @@
 #include <unordered_map>
 #include <glm/mat4x4.hpp>
 
-#include <utility/smartvector.hpp>
+#include <util/smartvector.hpp>
 #include <gl/vbo.hpp>
 
 class Shader {

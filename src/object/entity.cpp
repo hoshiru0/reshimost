@@ -1,7 +1,7 @@
-#include <glad/glad.hpp>
+#include "entity.hpp"
 
-#include <entity.hpp>
-#include <scene.hpp>
+#include <glad/glad.hpp>
+#include <scene/scene.hpp>
 
 static Shader entity_shader {
 R"(#version 300 es

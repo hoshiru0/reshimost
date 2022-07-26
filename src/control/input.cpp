@@ -1,8 +1,8 @@
 #include <GLFW/glfw3.h>
 #include <array>
 
-#include <input.hpp>
-#include <window.hpp>
+#include <control/input.hpp>
+#include <gui/window.hpp>
 
 Input input;
 

@@ -2,10 +2,10 @@
 #include <initializer_list>
 #include <iostream>
 
-#include <entity.hpp>
-#include <scene.hpp>
-#include <input.hpp>
-#include <scenes/scene1.hpp>
+#include "entity.hpp"
+
+#include <scene/scene1.hpp>
+#include <control/input.hpp>
 
 struct Pacman : Entity {
     SpriteAnim forward;

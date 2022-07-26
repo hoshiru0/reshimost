@@ -1,6 +1,6 @@
 #pragma once
 #include <cstdint>
-#include <sprite.hpp>
+#include <sprite/sprite.hpp>
 #include <initializer_list>
 
 using Offsets = std::initializer_list<glm::uvec2>;
