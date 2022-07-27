@@ -11,6 +11,11 @@ Window::Window(const std::string_view title, const uint16_t w, const uint16_t h)
     if (!glfwInit()) {
         terminate("ERROR: glfwInit() in file ", __FILE__);
     }
+
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+    glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+
     width = w;
     height = h;
 
