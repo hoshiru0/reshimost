@@ -4,7 +4,7 @@
 #include "camera.hpp"
 #include "transform.hpp"
 
-#include <sprite/spriteanim.hpp>
+#include <sprite/sprite.hpp>
 #include <gl/shader.hpp>
 #include <gl/vao.hpp>
 #include <gl/vbo.hpp>
@@ -15,7 +15,7 @@ struct Entity {
     Transform transform;
     inline static uint32_t entity_count {};
     uint32_t index;
-    SpriteAnim* sprites {};
+    Sprite* sprites {};
     Shader* shader;
     VAO vao;
     std::shared_ptr<VBO> shared_vbo_vertex;
@@ -24,7 +24,7 @@ struct Entity {
 
     void initEntity(void);
     virtual void initRender(void);
-    void setSpriteAnim(SpriteAnim&);
+    void setSpriteAnim(Sprite&);
 
     ~Entity() {}
 

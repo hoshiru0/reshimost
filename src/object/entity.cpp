@@ -44,7 +44,7 @@ static std::initializer_list<float> entity_vertices  {
 Entity::Entity() : shader(&entity_shader) {
 }
 
-void Entity::setSpriteAnim(SpriteAnim& anim) {
+void Entity::setSpriteAnim(Sprite& anim) {
     sprites = &anim;
     sprites->timeline = 0;
 }

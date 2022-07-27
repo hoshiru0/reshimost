@@ -8,13 +8,13 @@
 #include <control/input.hpp>
 
 struct Pacman : Entity {
-    SpriteAnim forward;
+    Sprite forward;
 
     Pacman(Scene* scene) : forward(
         &scene->cast<Scene1>().atlas1,
         {15, 15},
         offsets<{4, 0}, {20, 0}, {36, 0}>,
-        1./10
+        10
     ) {
         setSpriteAnim(forward);
     }

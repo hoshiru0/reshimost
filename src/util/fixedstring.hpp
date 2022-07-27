@@ -40,14 +40,14 @@ struct FixedString {
     template<std::size_t s1>
     consteval auto operator+(const FixedString<s1> str1) const {
         char newchar[s1+S+1] {};
-        std::copy_n(str, size, newchar);
-        std::copy_n(str1.str, s1, newchar+size);
+        std::copy_n(str, size(), newchar);
+        std::copy_n(str1.str, s1, newchar+size());
         return FixedString<s1+S>(newchar);
     }
 
     template<std::size_t s1>
     consteval bool operator==(const FixedString<s1> str2) const {
-        if (str2.size() != size) { return false; }
+        if (str2.size() != size()) { return false; }
         for (std::size_t i=0; i<str2.size();i++) {
             if (str2.str[i] != str[i]) {
                 return false;
