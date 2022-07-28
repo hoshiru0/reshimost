@@ -12,7 +12,7 @@
 
 
 struct Entity : GameObject {
-    Sprite* sprites {};
+    Sprite* sprite;
     Shader* shader;
     VAO vao;
     std::shared_ptr<VBO> shared_vbo_vertex;

@@ -17,11 +17,13 @@ struct Sprite {
     glm::uvec2 size {};
     Offsets offsets;
 
-    uint32_t speed;
-    double timeline {};
+    uint16_t speed;
+    int8_t loops;
 
-    Sprite(Texture* texture, glm::uvec2 size, Offsets offsets, uint32_t speed = 24);
-    Sprite(glm::uvec2 size, Offsets offsets);
-    
+    float timeline {};
+
+    Sprite(Texture& texture, glm::uvec2 size, Offsets offsets, uint16_t speed = 10, uint16_t loops = -1);
+    Sprite(glm::uvec2 size, Offsets offsets, uint16_t speed = 10, uint16_t loops = -1);
+
     void use();
 };

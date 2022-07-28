@@ -49,8 +49,8 @@ Entity::Entity() : shader(&entity_shader) {
 }
 
 void Entity::setSprite(Sprite& anim) {
-    sprites = &anim;
-    sprites->timeline = 0;
+    sprite = &anim;
+    sprite->timeline = 0;
     // Adjust scale
     transform.scale.x *= ((float) anim.size.x/anim.size.y);
 }
@@ -62,9 +62,7 @@ void Entity::update() {
 void Entity::render() {
     vao.use();
     shader->use();
-    if (sprites) {
-        sprites->use();
-    }
+    sprite->use();
     updateMVP();
     glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 }

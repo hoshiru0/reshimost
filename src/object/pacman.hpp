@@ -11,10 +11,10 @@ struct Pacman : Entity {
     Sprite forward;
 
     Pacman(Scene* scene) : forward(
-        &scene->cast<Scene1>().atlas1,
+        scene->cast<Scene1>().atlas1,
         {15, 15},
         offsets<glm::uvec2{4, 0}, glm::uvec2{20, 0}, glm::uvec2{36, 0}>,
-        10
+        8
     ) {
         setSprite(forward);
     }
