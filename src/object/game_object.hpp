@@ -4,10 +4,10 @@
 struct GameObject {
     Transform transform;
     uint32_t index;
-    GameObject();
-    virtual void render(void);
 
-    void destroy(void); 
-    ~GameObject();
+    virtual void update(void) = 0;
+    virtual void render(void) = 0;
+
+    void destroy(void);
 };
 

@@ -10,12 +10,12 @@ extern double current_time;
 struct Scene {
     //Textures textures;
     Camera camera;
-    SmartVector<std::shared_ptr<Entity>, true> entities;
+    SmartVector<std::shared_ptr<GameObject>, true> objects;
     template<typename T>
-    std::shared_ptr<T> createEntity() {
+    std::shared_ptr<T> createObject() {
         auto e = std::make_shared<T>(this);
-        entities.emplace_back(e);
-        e->index = entities.size()-1;
+        objects.emplace_back(e);
+        e->index = objects.size()-1;
         return e;
     }
 
@@ -24,7 +24,7 @@ struct Scene {
         return static_cast<T&>(*this);
     }
 
-    void destroyEntity(uint32_t index);
+    void destroyObject(GameObject& object);
     void updateScene(void);
     virtual void update(void) {}
     void run(void);

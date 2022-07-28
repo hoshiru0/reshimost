@@ -1,16 +1,7 @@
 #include "game_object.hpp"
+#include <scene/scene.hpp>
 
-GameObject::GameObject() {
 
-}
-
-void GameObject::render(void) {
-
-}
-
-void GameObject::destroy(void) {
-
-}
-GameObject::~GameObject() {
-
+void GameObject::destroy() {
+    current_scene->destroyObject(*this);
 }

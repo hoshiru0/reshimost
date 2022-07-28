@@ -10,14 +10,15 @@ std::unique_ptr<Scene> current_scene;
 void Scene::updateScene() {
     camera.update();
     update();
-    for (auto it = entities.end()-1; it >= entities.begin(); it--) {
-        it->get()->updateEntity();
+    for (auto it = objects.end()-1; it >= objects.begin(); it--) {
+        it->get()->update();
+        it->get()->render();
     }
 }
 
-void Scene::destroyEntity(uint32_t index) {
-    entities.back()->index = index;
-    entities.erase(entities.begin()+index);    
+void Scene::destroyObject(GameObject& obj) {
+    objects.back()->index = obj.index;
+    objects.erase(objects.begin()+obj.index);    
 }
 
 double delta_time {};

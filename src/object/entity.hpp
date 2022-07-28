@@ -12,22 +12,17 @@
 
 
 struct Entity : GameObject {
-    inline static uint32_t entity_count {};
-    uint32_t index;
     Sprite* sprites {};
     Shader* shader;
     VAO vao;
     std::shared_ptr<VBO> shared_vbo_vertex;
 
     Entity();
+    ~Entity();
 
-    void setSpriteAnim(Sprite&);
-
-    virtual ~Entity();
-
-    void updateEntity(void);
-    virtual void update(void);
-    virtual void render(void);
-    void destroy(void);
+    void setSprite(Sprite&);
+    void update(void);
+    void render(void);
+    void updateMVP(void);
 };
 

@@ -13,10 +13,10 @@ struct Pacman : Entity {
     Pacman(Scene* scene) : forward(
         &scene->cast<Scene1>().atlas1,
         {15, 15},
-        offsets<{4, 0}, {20, 0}, {36, 0}>,
+        offsets<glm::uvec2{4, 0}, glm::uvec2{20, 0}, glm::uvec2{36, 0}>,
         10
     ) {
-        setSpriteAnim(forward);
+        setSprite(forward);
     }
     void move() {
         float velocity = 5.0f;

@@ -48,7 +48,7 @@ Entity::Entity() : shader(&entity_shader) {
     vao.unbind();
 }
 
-void Entity::setSpriteAnim(Sprite& anim) {
+void Entity::setSprite(Sprite& anim) {
     sprites = &anim;
     sprites->timeline = 0;
     // Adjust scale
@@ -60,24 +60,18 @@ void Entity::update() {
 }
 
 void Entity::render() {
-    glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-}
-
-void Entity::updateEntity() {
+    vao.use();
     shader->use();
     if (sprites) {
         sprites->use();
     }
-    
-    glm::mat4 mvp = current_scene->camera.getMatrix() * transform.getMatrix();
-    shader->uniform("u_MVP", mvp);
-    
-    vao.use();
-    render();
+    updateMVP();
+    glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 }
 
-void Entity::destroy() {
-    current_scene->destroyEntity(index);
+void Entity::updateMVP() {
+    glm::mat4 mvp = current_scene->camera.getMatrix() * transform.getMatrix();
+    shader->uniform("u_MVP", mvp);
 }
 
 Entity::~Entity() {
