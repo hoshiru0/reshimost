@@ -16,3 +16,6 @@ sudo apt install libglm-dev libglfw3 libglfw3-dev libpng-dev
 sudo pacman -S glm glfw-x11 libpng
 ```
 
+### Gentoo
+```
+sudo emerge -av media-libs/glm media-libs/glfw media-libs/libpng
