@@ -2,7 +2,7 @@
 #include <cstdint>
 
 #include "camera.hpp"
-#include "transform.hpp"
+#include "game_object.hpp"
 
 #include <sprite/sprite.hpp>
 #include <gl/shader.hpp>
@@ -11,8 +11,7 @@
 #include <gl/texture.hpp>
 
 
-struct Entity {
-    Transform transform;
+struct Entity : GameObject {
     inline static uint32_t entity_count {};
     uint32_t index;
     Sprite* sprites {};
@@ -22,16 +21,13 @@ struct Entity {
 
     Entity();
 
-    void initEntity(void);
-    virtual void initRender(void);
     void setSpriteAnim(Sprite&);
 
-    ~Entity() {}
+    virtual ~Entity();
 
     void updateEntity(void);
-    virtual void updateRender(void);
     virtual void update(void);
-
+    virtual void render(void);
     void destroy(void);
 };
 

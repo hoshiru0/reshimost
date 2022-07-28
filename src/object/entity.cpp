@@ -42,31 +42,24 @@ static std::initializer_list<float> entity_vertices  {
 };
 
 Entity::Entity() : shader(&entity_shader) {
+    vao.use();
+    shader->use();
+    shared_vbo_vertex = shader->setAttribute<true>({"a_vert", "a_tex_coord"}, entity_vertices);
+    vao.unbind();
 }
 
 void Entity::setSpriteAnim(Sprite& anim) {
     sprites = &anim;
     sprites->timeline = 0;
-}
-
-void Entity::initEntity() {
-    shader->use();
-    vao.use();
-    initRender();
-    vao.unbind();
-}
-
-void Entity::initRender() { // default initialization
-    shared_vbo_vertex = shader->setAttribute<true>({"a_vert", "a_tex_coord"}, entity_vertices);
-    //shader.uniform("u_tex_size", glm::vec2(1.f, 1.f));
-    //shader->uniform("u_tex_size", glm::vec2((1.f/ texture->width) * 5000.f, (1.f/ texture->height) * 500.f));
-    //shader->uniform("u_tex_offset", glm::vec2((1.f / texture->width), 0.0f));
+    // Adjust scale
+    transform.scale.x *= ((float) anim.size.x/anim.size.y);
 }
 
 void Entity::update() {
     
 }
-void Entity::updateRender() {
+
+void Entity::render() {
     glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 }
 
@@ -80,10 +73,13 @@ void Entity::updateEntity() {
     shader->uniform("u_MVP", mvp);
     
     vao.use();
-    updateRender();
+    render();
 }
 
 void Entity::destroy() {
     current_scene->destroyEntity(index);
 }
 
+Entity::~Entity() {
+    
+}

@@ -3,14 +3,6 @@
 #include <algorithm>
 #include <string_view>
 
-template<std::size_t S>
-class FixedString;
-
-template<FixedString str>
-constexpr FixedString fs { str };
-
-template<std::size_t N> FixedString(const char (&) [N]) -> FixedString<N-1>;
-template<std::size_t N> FixedString(char (&) [N]) -> FixedString<N-1>;
 
 template<std::size_t S>
 struct FixedString {
@@ -78,6 +70,9 @@ struct FixedString {
         return -1;
     }
 };
+
+template<std::size_t N> FixedString(const char (&) [N]) -> FixedString<N-1>;
+template<std::size_t N> FixedString(char (&) [N]) -> FixedString<N-1>;
 
 
 template<std::size_t s1, std::size_t s2>

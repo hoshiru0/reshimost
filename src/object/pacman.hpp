@@ -24,21 +24,21 @@ struct Pacman : Entity {
         if (input.getKey(KEY_A)) {
             transform.position.x -= delta_time * velocity;
             transform.rotation = 0;
-            transform.scale.x = abs(transform.scale.x) * -1;
+            transform.scale.x = std::abs(transform.scale.x) * -1;
         }
         if (input.getKey(KEY_D)) {
             transform.position.x += delta_time * velocity;
             transform.rotation = 0;
-            transform.scale.x = abs(transform.scale.x);
+            transform.scale.x = std::abs(transform.scale.x);
         }
         if (input.getKey(KEY_W)) {
             transform.position.y += delta_time * velocity;
-            transform.scale.x = abs(transform.scale.x);
+            transform.scale.x = std::abs(transform.scale.x);
             transform.rotation = 90;
         }
         if (input.getKey(KEY_S)) {
             transform.position.y -= delta_time * velocity;
-            transform.scale.x = abs(transform.scale.x);
+            transform.scale.x = std::abs(transform.scale.x);
             transform.rotation = -90;
         }
         if (input.getKey(KEY_LEFT)) {

@@ -16,7 +16,6 @@ struct Scene {
         auto e = std::make_shared<T>(this);
         entities.emplace_back(e);
         e->index = entities.size()-1;
-        e->initEntity();
         return e;
     }
 

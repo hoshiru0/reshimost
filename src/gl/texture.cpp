@@ -25,7 +25,7 @@ Texture& Texture::operator=(Texture& other) {
     other.id = 0;
     return *this;
 }
-Texture& Texture::operator=(const char* name) {
+Texture& Texture::operator=(std::string_view name) {
     destroy();
     create();
     bindImage(name);
@@ -78,7 +78,7 @@ void Texture::bindImage(std::string_view imagestr) {
 
     png_read_image(png, row_pointers);
 
-    int alpha;
+    int alpha {};
     switch (png_get_color_type(png, info)) {
         case PNG_COLOR_TYPE_RGBA:
             alpha = GL_RGBA;

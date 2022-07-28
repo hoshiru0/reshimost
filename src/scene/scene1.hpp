@@ -3,7 +3,7 @@
 
 #include "scene.hpp"
 
-class Pacman;
+struct Pacman;
 
 struct Scene1 : Scene {
     Texture atlas1 {"sprites"};

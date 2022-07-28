@@ -14,7 +14,7 @@ struct Texture {
     Texture(uint32_t texture);
 
     Texture& operator=(Texture& other);
-    Texture& operator=(const char* name);
+    Texture& operator=(std::string_view name);
 
     void create(void);
     void bindImage(std::string_view);
