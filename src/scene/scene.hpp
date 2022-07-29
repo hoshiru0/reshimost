@@ -10,6 +10,7 @@ extern double current_time;
 struct Scene {
     //Textures textures;
     Camera camera;
+
     SmartVector<std::shared_ptr<GameObject>, true> objects;
     template<typename T>
     std::shared_ptr<T> createObject() {

@@ -34,6 +34,7 @@ Texture& Texture::operator=(std::string_view name) {
 
 void Texture::create() {
     glGenTextures(1, &id);
+    std::cout << "create texture " << id << "\n";
 }
 
 void Texture::use() {

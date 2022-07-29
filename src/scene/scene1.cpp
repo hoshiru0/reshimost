@@ -1,9 +1,11 @@
 #include "scene1.hpp"
 #include <object/pacman.hpp>
 #include <control/input.hpp>
+#include <object/ghost.hpp>
 
 Scene1::Scene1() {
     current = createObject<Pacman>();
+    createObject<Ghost>();
 }
 
 void Scene1::update() {

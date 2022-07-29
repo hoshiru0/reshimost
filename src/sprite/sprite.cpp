@@ -16,6 +16,8 @@ void Sprite::use() {
     uint32_t current_frame = static_cast<uint32_t>(timeline / (1.f / speed)); 
     auto& offset = *(offsets.begin() + current_frame);
 
+    texture->use();
+
     current_shader->uniform(
         "u_tex_offset", 
         glm::vec2(offset.x/(float)texture->width, offset.y/(float)texture->height)
@@ -26,7 +28,6 @@ void Sprite::use() {
         glm::vec2(size.x/(float)texture->width, size.y/(float)texture->height)
     );
 
-    
     if (loops) {
         double next_timeline = std::fmod(timeline + delta_time, 1.f / speed * offsets.size());
         

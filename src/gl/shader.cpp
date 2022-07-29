@@ -100,23 +100,8 @@ void Shader::use() {
     current_shader = this;
 }
 
-template<bool shared, typename T>
-std::conditional_t<shared, std::shared_ptr<VBO>, VBO> Shader::setAttribute(std::initializer_list<const char*> arr, std::initializer_list<T> buffer, uint32_t draw_type) {
-    std::conditional_t<shared, std::shared_ptr<VBO>, VBO> vbo;
-    if constexpr (shared) {
-        auto& weakptr = Shader::shared_vbo_table[(void*)buffer.begin()];
-        vbo = weakptr.lock();
-        if (!vbo) {
-            vbo = std::make_shared<VBO>();
-            weakptr = vbo;
-            vbo->bufferData(buffer, draw_type);
-        } else {
-            vbo->use();
-        }
-    } else {
-        vbo.bufferData(buffer, draw_type);
-    }
-
+template<typename T>
+void Shader::setAttribPointer(std::initializer_list<const char*> arr) {
     uint32_t size_row {};
     for (auto name : arr) {
         size_row += attribs[name].size;
@@ -141,6 +126,26 @@ std::conditional_t<shared, std::shared_ptr<VBO>, VBO> Shader::setAttribute(std::
         glEnableVertexAttribArray(info.index);
         c += size;
     }
+}
+
+template<bool shared, typename T>
+std::conditional_t<shared, std::shared_ptr<VBO>, VBO> Shader::setAttribute(std::initializer_list<const char*> arr, std::initializer_list<T> buffer, uint32_t draw_type) {
+    std::conditional_t<shared, std::shared_ptr<VBO>, VBO> vbo;
+    if constexpr (shared) {
+        auto& weakptr = Shader::shared_vbo_table[(void*)buffer.begin()];
+        vbo = weakptr.lock();
+        if (!vbo) {
+            vbo = std::make_shared<VBO>();
+            weakptr = vbo;
+            vbo->bufferData(buffer, draw_type);
+        } else {
+            vbo->use();
+        }
+    } else {
+        vbo.bufferData(buffer, draw_type);
+    }
+
+    setAttribPointer<T>(arr);
     return vbo;
 }
 

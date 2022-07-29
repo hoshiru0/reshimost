@@ -42,7 +42,6 @@ static std::initializer_list<float> entity_vertices  {
 };
 
 Entity::Entity() : shader(&entity_shader) {
-    vao.use();
     shader->use();
     shared_vbo_vertex = shader->setAttribute<true>({"a_vert", "a_tex_coord"}, entity_vertices);
     vao.unbind();
@@ -60,7 +59,7 @@ void Entity::update() {
 }
 
 void Entity::render() {
-    vao.use();
+    shared_vbo_vertex->use();
     shader->use();
     sprite->use();
     updateMVP();
