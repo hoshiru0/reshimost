@@ -3,5 +3,5 @@
 
 
 void GameObject::destroy() {
-    current_scene->destroyObject(*this);
+    //current_scene->destroyObject(*this);
 }

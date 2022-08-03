@@ -20,7 +20,6 @@ void init_glad() {
     glEnable( GL_BLEND );  
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);  
-    Shader::compileAll();
 }
 
 int main() {

@@ -2,7 +2,7 @@
 #include <gl/texture.hpp>
 #include <gl/shader.hpp>
 
-static Shader text_shader {
+/*static Shader text_shader {
 R"(#version 300 es
 precision mediump float;
 in vec2 a_vert;
@@ -31,6 +31,7 @@ void main() {
     }
 })"
 };
+*/
 
 Text::Text(Texture* texture, std::string_view text) : texture(texture), text(text) {
     create();
@@ -46,7 +47,7 @@ void Text::create() {
 
 void Text::render() {
     texture->use();
-    text_shader.use();
+   // text_shader.use();
 
     for (uint8_t c : text) {
 

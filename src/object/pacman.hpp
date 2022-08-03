@@ -4,23 +4,30 @@
 
 #include "entity.hpp"
 
-#include <scene/scene1.hpp>
 #include <control/input.hpp>
 
 struct Pacman : Entity {
-    Sprite forward;
-
-    Pacman(Scene* scene) : forward(
-        scene->cast<Scene1>().atlas1,
+    Sprite sprite {
         {15, 15},
-        offsets<glm::uvec2{4, 0}, glm::uvec2{20, 0}, glm::uvec2{36, 0}>,
+        offsets<{4,0},{20,0},{36,0}>,
         8
-    ) {
-        setSprite(forward);
+    };
+
+    Pacman() {
     }
+
+    using Props = DefineEntity<
+        Pacman,
+        TextureName<"sprites">
+    >;
+
+    void update() {
+        sprite.use();
+        render();
+    }
+
     void move() {
         float velocity = 5.0f;
-
         if (input.getKey(KEY_A)) {
             transform.position.x -= delta_time * velocity;
             transform.rotation = 0;

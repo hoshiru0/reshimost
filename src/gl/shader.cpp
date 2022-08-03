@@ -7,6 +7,7 @@ Shader* current_shader;
 
 Shader::Shader(const char* vSource_, const char* fSource_) : vSource(vSource_), fSource(fSource_) {
     list.push_back(this);
+    compile();
 }
 
 void Shader::compileAll() {

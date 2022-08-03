@@ -2,13 +2,8 @@
 
 extern double delta_time;
 
-Sprite::Sprite(Texture& texture, glm::uvec2 size, Offsets offsets, uint16_t speed, uint16_t loops)
- : texture(&texture), size(size), offsets(offsets), speed(speed), loops(loops) {
-
-}
-
 Sprite::Sprite(glm::uvec2 size, Offsets offsets, uint16_t speed, uint16_t loops) 
-: texture(current_texture), size(size), offsets(offsets), speed(speed), loops(loops) {
+: size(size), offsets(offsets), speed(speed), loops(loops) {
 
 }
 
@@ -16,16 +11,14 @@ void Sprite::use() {
     uint32_t current_frame = static_cast<uint32_t>(timeline / (1.f / speed)); 
     auto& offset = *(offsets.begin() + current_frame);
 
-    texture->use();
-
     current_shader->uniform(
         "u_tex_offset", 
-        glm::vec2(offset.x/(float)texture->width, offset.y/(float)texture->height)
+        glm::vec2(offset.x/(float)current_texture->width, offset.y/(float)current_texture->height)
     );
 
     current_shader->uniform(
         "u_tex_size", 
-        glm::vec2(size.x/(float)texture->width, size.y/(float)texture->height)
+        glm::vec2(size.x/(float)current_texture->width, size.y/(float)current_texture->height)
     );
 
     if (loops) {

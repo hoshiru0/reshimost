@@ -5,31 +5,20 @@
 
 #include <GLFW/glfw3.h>
 
-std::unique_ptr<Scene> current_scene;
-
-void Scene::updateScene() {
-    camera.update();
-    update();
-    for (auto it = objects.end()-1; it >= objects.begin(); it--) {
-        it->get()->update();
-        it->get()->render();
-    }
-}
-
-void Scene::destroyObject(GameObject& obj) {
-    objects.back()->index = obj.index;
-    objects.erase(objects.begin()+obj.index);    
-}
-
 double delta_time {};
 double current_time {};
+uint32_t fps {};
 
-void Scene::run() {
-    uint32_t fps {};
+SceneBase* current_scene;
+
+SceneBase::SceneBase() {
+    current_scene = this;
+}
+
+void SceneBase::run() {    
     float next_second = 1;
     double time_last_frame {};
     while (!glfwWindowShouldClose(window.getGlfwWindowPtr())) {
-        /* Render here */
         delta_time = glfwGetTime()-time_last_frame;
         current_time = glfwGetTime();
         time_last_frame = current_time;

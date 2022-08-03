@@ -13,7 +13,6 @@ constexpr Offsets offsets {
 };
 
 struct Sprite {
-    Texture* texture {};
     glm::uvec2 size {};
     Offsets offsets;
 
@@ -22,7 +21,6 @@ struct Sprite {
 
     float timeline {};
 
-    Sprite(Texture& texture, glm::uvec2 size, Offsets offsets, uint16_t speed = 10, uint16_t loops = -1);
     Sprite(glm::uvec2 size, Offsets offsets, uint16_t speed = 10, uint16_t loops = -1);
 
     void use();
