@@ -1,5 +1,4 @@
 #pragma once
-#include <bits/utility.h>
 #include <memory>
 #include <util/smartvector.hpp>
 #include <util/constexpr_for.hpp>
